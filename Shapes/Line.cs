@@ -12,7 +12,17 @@ namespace WpfAppComputerGraphics2.Shapes
         public Point p1;
         public Point p2;
 
-        public Line() { }
+        public Line(int x1, int y1, int x2, int y2)
+        {
+            p1 = new Point(x1, y1);
+            p2 = new Point(x2, y2);
+        }
+
+        public Line(Point P1, Point P2) 
+        {
+            p1 = P1;
+            p2 = P2;
+        }
 
         public void Render() { }
 
