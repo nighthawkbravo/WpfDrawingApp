@@ -9,26 +9,26 @@ namespace WpfAppComputerGraphics2.Shapes
 {
     public class Line : IShape
     {
-        public Point p1;
-        public Point p2;
+        public Point P1 { set; get; }
+        public Point P2 { set; get; }
 
         public Line(int x1, int y1, int x2, int y2)
         {
-            p1 = new Point(x1, y1);
-            p2 = new Point(x2, y2);
+            P1 = new Point(x1, y1);
+            P2 = new Point(x2, y2);
         }
 
-        public Line(Point P1, Point P2) 
+        public Line(Point p1, Point p2) 
         {
-            p1 = P1;
-            p2 = P2;
+            P1 = p1;
+            P2 = p2;
         }
-
+        
         public void Render() { }
 
         public string Save()
         {
-            return $"Line: ({p1}) ({p2})";
+            return $"Line: ({P1})({P2})";
         }
     }
 }
