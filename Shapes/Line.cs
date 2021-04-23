@@ -24,11 +24,16 @@ namespace WpfAppComputerGraphics2.Shapes
             P2 = p2;
         }
         
-        public void Render() { }
+        public Point GetCenter()
+        {
+            return new Point((P1.X+P2.X) / 2, (P1.Y + P2.Y) / 2);
+        }
 
         public string Save()
         {
             return $"Line: ({P1})({P2})";
         }
+
+        public void Render() { }
     }
 }

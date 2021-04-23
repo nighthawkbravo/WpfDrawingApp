@@ -18,11 +18,16 @@ namespace WpfAppComputerGraphics2.Shapes
             EdgePoint = e;
         }
 
-        public void Render() { }
+        public Point GetCenter()
+        {
+            return Center;
+        }
 
         public string Save()
         {
             return $"Circle: ({Center})({EdgePoint})";
         }
+
+        public void Render() { }
     }
 }

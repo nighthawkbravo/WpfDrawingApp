@@ -25,7 +25,20 @@ namespace WpfAppComputerGraphics2.Shapes
             numOfPoints = n;
         }
 
-        public void Render() { }
+        public Point GetCenter()
+        {
+            double sumX = 0;
+            double sumY = 0;
+
+            foreach (var p in Points)
+            {
+                sumX += p.X;
+                sumY += p.Y;
+            }
+
+            return new Point(sumX / numOfPoints, sumY / numOfPoints);
+        }
+
         public string Save()
         {
             string res = $"Polygon({numOfPoints}): ";
@@ -37,5 +50,7 @@ namespace WpfAppComputerGraphics2.Shapes
 
             return res;
         }
+
+        public void Render() { }
     }
 }
