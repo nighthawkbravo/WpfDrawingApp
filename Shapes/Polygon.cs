@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Color = System.Drawing.Color;
+using Point = System.Drawing.Point;
 
 namespace WpfAppComputerGraphics2.Shapes
 {
     public class Polygon : IShape
     {
+        public Color myColor { get; set; }
         private List<Point> Points;
         private readonly int numOfPoints;
 
@@ -17,12 +20,14 @@ namespace WpfAppComputerGraphics2.Shapes
         {
             Points = ps;
             numOfPoints = ps.Count;
+            myColor = Color.Black;
         }
 
         public Polygon(int n, List<Point> ps)
         {
             Points = ps;
             numOfPoints = n;
+            myColor = Color.Black;
         }
 
         public Point GetCenter()
