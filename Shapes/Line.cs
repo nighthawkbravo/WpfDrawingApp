@@ -11,17 +11,20 @@ namespace WpfAppComputerGraphics2.Shapes
     {
         public Point P1 { set; get; }
         public Point P2 { set; get; }
+        public int Thickness { set; get; }
 
-        public Line(int x1, int y1, int x2, int y2)
+        public Line(int x1, int y1, int x2, int y2, int t=1)
         {
             P1 = new Point(x1, y1);
             P2 = new Point(x2, y2);
+            Thickness = t;
         }
 
-        public Line(Point p1, Point p2) 
+        public Line(Point p1, Point p2, int t=1) 
         {
             P1 = p1;
             P2 = p2;
+            Thickness = t;
         }
         
         public Point GetCenter()
@@ -31,7 +34,7 @@ namespace WpfAppComputerGraphics2.Shapes
 
         public string Save()
         {
-            return $"Line: ({P1})({P2})";
+            return $"Line({Thickness}): ({P1})({P2})";
         }
 
         public void Render() { }
