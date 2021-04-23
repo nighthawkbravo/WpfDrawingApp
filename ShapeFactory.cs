@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace WpfAppComputerGraphics2
 {
-    public interface IShape
+    public abstract class ShapeFactory
     {
-        void Render();
-        string Save();
+        public IShape constructShape(string name)
+        {
+
+        }
     }
 }

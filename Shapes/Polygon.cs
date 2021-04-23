@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace WpfAppComputerGraphics2.Shapes
 {
-    class Polygon : IShape
+    public class Polygon : IShape
     {
+
+        public void Render() { }
     }
 }
