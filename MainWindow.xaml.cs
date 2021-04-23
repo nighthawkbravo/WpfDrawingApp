@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Color = System.Drawing.Color;
+using Point = System.Drawing.Point;
+
 
 namespace WpfAppComputerGraphics2
 {
@@ -20,9 +23,23 @@ namespace WpfAppComputerGraphics2
     /// </summary>
     public partial class MainWindow : Window
     {
+        // A blank BitmapImage.
+        private readonly BitmapImage blankBMI;
+
+        // The BitmapImage that is being drawn on.
+        private BitmapImage curBMI;
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+        
+
+        private void ImageMouseMove(object sender, MouseEventArgs e)
+        {
+            var p = e.GetPosition(myImage);
+            MouseXText.Text = $"X: {p.X:0.}";
+            MouseYText.Text = $"Y: {p.Y:0.}";
         }
     }
 }

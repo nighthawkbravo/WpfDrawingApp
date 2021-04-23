@@ -12,19 +12,24 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5">
-            <Canvas Background="White"/>
+            <Canvas Background="White" MouseMove="ImageMouseMove">
+                <Image Name="myImage"/>
+            </Canvas>
         </Border>
         
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Margin="0,0,5,0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="2"/>
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                
             </Grid.RowDefinitions>
-            
-            <Grid Grid.Row="0">
+
+            <Grid Grid.Row="0" Margin="0,5"> <!-- First Section -->
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -41,7 +46,47 @@
                         <TextBlock Name="MouseYText" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Y: " FontSize="16"/>
                     </Grid>
                 </Grid> <!-- X and Y Text -->
+                <Grid Grid.Row="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Margin="20,2">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Select" FontSize="16"/>
+                        </Button>
+                        <Border Grid.Column="1" Margin="15,2" BorderBrush="Black" BorderThickness="1">
+                            <TextBlock Name="SelectedObject"  HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="None" FontSize="12"/> <!-- 23 characters max -->
+                        </Border>                        
+                    </Grid>
+                </Grid> <!-- Selection and Selected -->
+            </Grid>            
+            <Grid Grid.Row="1" Background="Black"></Grid>
+            
+            <Grid Grid.Row="2" Margin="0,5"> <!-- Second Section -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>                
             </Grid>
         </Grid>
     </Grid>
 </Window>
+
+    
+<!-- 
+    
+    <Grid Grid.Row="#" Margin="0,5">
+<Grid.RowDefinitions>
+    <RowDefinition Height="*"/>
+    <RowDefinition Height="*"/>
+    <RowDefinition Height="*"/>
+</Grid.RowDefinitions>
+</Grid>
+
+
+
+
+
+-->
