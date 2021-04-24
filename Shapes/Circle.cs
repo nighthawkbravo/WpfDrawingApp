@@ -30,7 +30,12 @@ namespace WpfAppComputerGraphics2.Shapes
 
         public string Save()
         {
-            return $"Circle: ({Center})({EdgePoint})";
+            return $"Circle: ({Center.X},{Center.Y})-({EdgePoint.X},{EdgePoint.Y})";
+        }
+
+        public string GetNameAndCenter()
+        {
+            return $"Circle ({GetCenter().X},{GetCenter().Y})";
         }
 
         public BitmapImage Render(BitmapImage bmi) { return null; }

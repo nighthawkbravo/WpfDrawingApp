@@ -32,7 +32,12 @@ namespace WpfAppComputerGraphics2.Shapes
 
         public string Save()
         {
-            return $"Line({Thickness}): ({P1})({P2})";
+            return $"Line({Thickness}): ({P1.X},{P1.Y})-({P2.X},{P2.Y})";
+        }
+
+        public string GetNameAndCenter()
+        {
+            return $"Line ({GetCenter().X},{GetCenter().Y})";
         }
 
         public BitmapImage Render(BitmapImage bmi) { return null; }

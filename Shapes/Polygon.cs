@@ -51,10 +51,15 @@ namespace WpfAppComputerGraphics2.Shapes
 
             foreach(var p in Points)
             {
-                res += $"({p})";
+                res += $"({p.X},{p.Y})";
             }
 
             return res;
+        }
+
+        public string GetNameAndCenter()
+        {
+            return $"Polygon ({GetCenter().X},{GetCenter().Y})";
         }
 
         public BitmapImage Render(BitmapImage bmi) { return null; }

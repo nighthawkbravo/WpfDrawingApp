@@ -16,5 +16,6 @@ namespace WpfAppComputerGraphics2
         Point GetCenter();
         BitmapImage Render(BitmapImage bmi);
         string Save();
+        string GetNameAndCenter();
     }
 }
