@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
 
@@ -32,8 +33,8 @@ namespace WpfAppComputerGraphics2.Shapes
 
         public Point GetCenter()
         {
-            double sumX = 0;
-            double sumY = 0;
+            int sumX = 0;
+            int sumY = 0;
 
             foreach (var p in Points)
             {
@@ -56,6 +57,6 @@ namespace WpfAppComputerGraphics2.Shapes
             return res;
         }
 
-        public void Render() { }
+        public BitmapImage Render(BitmapImage bmi) { return null; }
     }
 }

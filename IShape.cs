@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
 
@@ -13,7 +14,7 @@ namespace WpfAppComputerGraphics2
     {
         Color myColor { get; set; }
         Point GetCenter();
-        void Render();
+        BitmapImage Render(BitmapImage bmi);
         string Save();
     }
 }
