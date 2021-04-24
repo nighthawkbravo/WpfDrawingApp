@@ -40,6 +40,6 @@ namespace WpfAppComputerGraphics2.Shapes
             return $"Circle ({GetCenter().X},{GetCenter().Y})";
         }
 
-        public BitmapImage Render(BitmapImage bmi) { return null; }
+        public BitmapImage Render(BitmapImage bmi) { return bmi; }
     }
 }
