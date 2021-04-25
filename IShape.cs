@@ -18,5 +18,8 @@ namespace WpfAppComputerGraphics2
         Bitmap Render(Bitmap wbm);
         string Save();
         string GetNameAndCenter();
+        int Lower(int a, int b);
+        int Greater(int a, int b);
+
     }
 }

@@ -23,22 +23,28 @@ namespace WpfAppComputerGraphics2.Shapes
             EdgePoint = e;
             myColor = Color.Black;
         }
-
         public Point GetCenter()
         {
             return Center;
         }
-
         public string Save()
         {
             return $"Circle: ({Center.X},{Center.Y})-({EdgePoint.X},{EdgePoint.Y})";
         }
-
         public string GetNameAndCenter()
         {
             return $"Circle ({GetCenter().X},{GetCenter().Y})";
         }
-
+        public int Lower(int a, int b)
+        {
+            if (a < b) return a;
+            else return b;
+        }
+        public int Greater(int a, int b)
+        {
+            if (a > b) return a;
+            else return b;
+        }
         public Bitmap Render(Bitmap bm) { return bm; }
     }
 }

@@ -24,14 +24,12 @@ namespace WpfAppComputerGraphics2.Shapes
             numOfPoints = ps.Count;
             myColor = Color.Black;
         }
-
         public Polygon(int n, List<Point> ps)
         {
             Points = ps;
             numOfPoints = n;
             myColor = Color.Black;
         }
-
         public Point GetCenter()
         {
             int sumX = 0;
@@ -45,7 +43,6 @@ namespace WpfAppComputerGraphics2.Shapes
 
             return new Point(sumX / numOfPoints, sumY / numOfPoints);
         }
-
         public string Save()
         {
             string res = $"Polygon({numOfPoints}): ";
@@ -57,12 +54,20 @@ namespace WpfAppComputerGraphics2.Shapes
 
             return res;
         }
-
         public string GetNameAndCenter()
         {
             return $"Polygon ({GetCenter().X},{GetCenter().Y})";
         }
-
+        public int Lower(int a, int b)
+        {
+            if (a < b) return a;
+            else return b;
+        }
+        public int Greater(int a, int b)
+        {
+            if (a > b) return a;
+            else return b;
+        }
         public Bitmap Render(Bitmap bm) { return bm; }
     }
 }
