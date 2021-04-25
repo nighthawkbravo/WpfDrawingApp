@@ -45,6 +45,14 @@ namespace WpfAppComputerGraphics2.Shapes
             if (a > b) return a;
             else return b;
         }
+        public bool IsInBound(int x, int y, Bitmap bm)
+        {
+            if (x > 0 && x < bm.Width && y > 0 && y < bm.Height)
+            {
+                return true;
+            }
+            return false;
+        }
         public Bitmap Render(Bitmap bm) { return bm; }
     }
 }

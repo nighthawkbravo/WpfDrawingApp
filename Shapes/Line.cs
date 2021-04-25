@@ -319,5 +319,13 @@ namespace WpfAppComputerGraphics2.Shapes
             }
         }
 
+        public bool IsInBound(int x, int y, Bitmap bm)
+        {
+            if (x>0 && x<bm.Width && y>0 && y<bm.Height)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

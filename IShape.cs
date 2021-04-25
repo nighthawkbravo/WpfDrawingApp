@@ -20,6 +20,6 @@ namespace WpfAppComputerGraphics2
         string GetNameAndCenter();
         int Lower(int a, int b);
         int Greater(int a, int b);
-
+        bool IsInBound(int x, int y, Bitmap bm);
     }
 }
