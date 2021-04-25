@@ -89,7 +89,8 @@ namespace WpfAppComputerGraphics2
         }
         private void RenderLayers()
         {
-            foreach(var shape in layers)
+            bm = new Bitmap(width, height);
+            foreach (var shape in layers)
             {
                 bm = shape.Render(bm);
             }
@@ -126,21 +127,22 @@ namespace WpfAppComputerGraphics2
         private void ResetFlagsAndCP()
         {
             CanvasPoints.Clear();
+            clickCount = 0;
 
-            lineClickFlag = false;
+            lineDrawFlag = false;
             circleClickFlag = false;
             polyClickFlag = false;
-            selectClickFlag = false;
+            selectShapeFlag = false;
         }
 
 
         // ----- Flags -----
 
-        private bool lineClickFlag = false;
+        private bool lineDrawFlag = false;
 
         private bool circleClickFlag = false;
         private bool polyClickFlag = false;
-        private bool selectClickFlag = false;
+        private bool selectShapeFlag = false;
 
 
         private void ImageMouseDown(object sender, MouseButtonEventArgs e)
@@ -148,7 +150,7 @@ namespace WpfAppComputerGraphics2
             int x = (int)e.GetPosition(myImage).X;
             int y = (int)e.GetPosition(myImage).Y;
 
-            if (selectClickFlag)
+            if (selectShapeFlag)
             {
                 var p = new Point(x, y);
                 CanvasPoints.Add(p);
@@ -157,11 +159,10 @@ namespace WpfAppComputerGraphics2
                 {
                     SelectedShape = FindClosestShape(p);
                     CanvasPoints.Clear();
-                    selectClickFlag = false;
+                    selectShapeFlag = false;
                     if (SelectedShape != null)
                     {
-                        SelectedObject.Text = SelectedShape.GetNameAndCenter();
-                        //MessageBox.Show($"{SelectedShape.GetNameAndCenter()}");
+                        SelectedObject.Text = SelectedShape.GetNameAndCenter();                        
                     }
                     else
                     {
@@ -169,9 +170,7 @@ namespace WpfAppComputerGraphics2
                     }
                 }
             } // Select Handling
-
-
-            if (lineClickFlag)
+            if (lineDrawFlag)
             {
                 CanvasPoints.Add(new Point(x, y));
                 clickCount--;
@@ -179,11 +178,11 @@ namespace WpfAppComputerGraphics2
                 {
                     layers.Add(new Line(CanvasPoints[0], CanvasPoints[1], LineThickValue));
                     CanvasPoints.Clear();
-                    lineClickFlag = false;
+                    lineDrawFlag = false;
                     RenderLayers();
                 }
-            } // Line Handling
-
+            } // Line Creating 
+            
         }
 
         // +----- Menu Buttons -----+
@@ -191,39 +190,46 @@ namespace WpfAppComputerGraphics2
         // ----- Mouse Coordinates -----
         private void SelectButton(object sender, RoutedEventArgs e)
         {
-            if (!selectClickFlag)
+            if (!selectShapeFlag)
             {
                 ResetFlagsAndCP();
-                selectClickFlag = true;
+                selectShapeFlag = true;
                 clickCount = 1;                
             }            
         }
 
 
-
+        private void DeleteShapeButton(object sender, RoutedEventArgs e)
+        {
+            if (SelectedShape != null)
+            {
+                ResetFlagsAndCP();
+                layers.Remove(SelectedShape);
+                RenderLayers();
+                SelectedObject.Text = "Deleted Shape";
+            }
+        }
 
         // ----- Line -----
         private void DrawLineButton(object sender, RoutedEventArgs e)
         {
-            if (!lineClickFlag)
+            if (!lineDrawFlag)
             {
                 ResetFlagsAndCP();
-                lineClickFlag = true;
+                lineDrawFlag = true;
                 clickCount = 2;                
             }
         }
-
-
-
-
         
+
+
+
 
 
         private void ClearCanvasButton(object sender, RoutedEventArgs e)
         {
             layers.Clear();
-            bm = new Bitmap(width, height);
-            DisplayImage(bm);
+            RenderLayers();
         }
 
 
