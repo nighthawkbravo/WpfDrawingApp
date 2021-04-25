@@ -76,6 +76,11 @@ namespace WpfAppComputerGraphics2.Shapes
             }
             return false;
         }
+        public void ColorPixel(int x, int y, Bitmap bm)
+        {
+            if (!IsInBound(x, y, bm)) return;
+            bm.SetPixel(x, y, myColor);
+        }
         public Bitmap Render(Bitmap bm) { return bm; }
     }
 }

@@ -55,7 +55,7 @@ namespace WpfAppComputerGraphics2.Shapes
             {
                 for (int i = Lower(P1.Y, P2.Y); i <= Greater(P1.Y, P2.Y); ++i)
                 {
-                    ColorPixels(P1.X, i, bm);
+                    ColorPixel(P1.X, i, bm);
                 }
             }
             // Horizontal line
@@ -63,7 +63,7 @@ namespace WpfAppComputerGraphics2.Shapes
             {
                 for (int i = Lower(P1.X, P2.X); i <= Greater(P1.X, P2.X); ++i)
                 {
-                    ColorPixels(i, P1.Y, bm);
+                    ColorPixel(i, P1.Y, bm);
                 }
             }
             // non Horizontal/Vertical line
@@ -114,7 +114,7 @@ namespace WpfAppComputerGraphics2.Shapes
             int dy = y2 - y1;
             int d = dy - (dx / 2);
             int x = x1, y = y1;
-            ColorPixels(x, y, bm);
+            ColorPixel(x, y, bm);
 
             while (x < x2)
             {
@@ -125,7 +125,7 @@ namespace WpfAppComputerGraphics2.Shapes
                     d += (dy - dx);
                     y++;
                 }
-                ColorPixels(x, y, bm);
+                ColorPixel(x, y, bm);
             }
         }
         private void XmidPointTRBL(int x2, int y2, int x1, int y1, Bitmap bm)
@@ -134,7 +134,7 @@ namespace WpfAppComputerGraphics2.Shapes
             int dy = y2 - y1;
             int d = dy - (dx / 2);
             int x = x1, y = y1;
-            ColorPixels(x, y, bm);
+            ColorPixel(x, y, bm);
 
             while (x < x2)
             {
@@ -145,7 +145,7 @@ namespace WpfAppComputerGraphics2.Shapes
                     d += (dy - dx);
                     y++;
                 }
-                ColorPixels(x, y, bm);
+                ColorPixel(x, y, bm);
             }
         }
         private void XmidPointBRTL(int x1, int y1, int x2, int y2, Bitmap bm)
@@ -154,7 +154,7 @@ namespace WpfAppComputerGraphics2.Shapes
             int dy = y2 - y1;
             int d = dy - (dx / 2);
             int x = x1, y = y1;
-            ColorPixels(x, y, bm);
+            ColorPixel(x, y, bm);
 
             while (x > x2)
             {
@@ -165,7 +165,7 @@ namespace WpfAppComputerGraphics2.Shapes
                     d += (dy - dx);
                     y++;
                 }
-                ColorPixels(x, y, bm);
+                ColorPixel(x, y, bm);
             }
         }
         private void XmidPointTLBR(int x2, int y2, int x1, int y1, Bitmap bm)
@@ -174,7 +174,7 @@ namespace WpfAppComputerGraphics2.Shapes
             int dy = y2 - y1;
             int d = dy - (dx / 2);
             int x = x1, y = y1;
-            ColorPixels(x, y, bm);
+            ColorPixel(x, y, bm);
 
             while (x > x2)
             {
@@ -185,7 +185,7 @@ namespace WpfAppComputerGraphics2.Shapes
                     d += (dy - dx);
                     y++;
                 }
-                ColorPixels(x, y, bm);
+                ColorPixel(x, y, bm);
             }
         }
 
@@ -198,7 +198,7 @@ namespace WpfAppComputerGraphics2.Shapes
 
             int d = dx - (dy / 2);
             int x = x1, y = y1;
-            ColorPixels(x, y, bm);
+            ColorPixel(x, y, bm);
 
             while (y < y2)
             {
@@ -209,7 +209,7 @@ namespace WpfAppComputerGraphics2.Shapes
                     d += (dx - dy);
                     x++;
                 }
-                ColorPixels(x, y, bm);
+                ColorPixel(x, y, bm);
             }
         }
         private void YmidPointTRBL(int x2, int y2, int x1, int y1, Bitmap bm)
@@ -219,7 +219,7 @@ namespace WpfAppComputerGraphics2.Shapes
 
             int d = dx - (dy / 2);
             int x = x1, y = y1;
-            ColorPixels(x, y, bm);
+            ColorPixel(x, y, bm);
 
             while (y < y2)
             {
@@ -230,7 +230,7 @@ namespace WpfAppComputerGraphics2.Shapes
                     d += (dx - dy);
                     x++;
                 }
-                ColorPixels(x, y, bm);
+                ColorPixel(x, y, bm);
             }
         }
         private void YmidPointBRTL(int x1, int y1, int x2, int y2, Bitmap bm)
@@ -240,7 +240,7 @@ namespace WpfAppComputerGraphics2.Shapes
 
             int d = dx - (dy / 2); // 
             int x = x1, y = y1;
-            ColorPixels(x, y, bm);
+            ColorPixel(x, y, bm);
 
             while (y < y2)
             {
@@ -251,7 +251,7 @@ namespace WpfAppComputerGraphics2.Shapes
                     d += (dx - dy);
                     x--;            // x--
                 }
-                ColorPixels(x, y, bm);
+                ColorPixel(x, y, bm);
             }
         }
         private void YmidPointTLBR(int x2, int y2, int x1, int y1, Bitmap bm)
@@ -261,7 +261,7 @@ namespace WpfAppComputerGraphics2.Shapes
 
             int d = dx - (dy / 2); // 
             int x = x1, y = y1;
-            ColorPixels(x, y, bm);
+            ColorPixel(x, y, bm);
 
             while (y < y2)
             {
@@ -272,10 +272,10 @@ namespace WpfAppComputerGraphics2.Shapes
                     d += (dx - dy);
                     x--;            // x--
                 }
-                ColorPixels(x, y, bm);
+                ColorPixel(x, y, bm);
             }
         }
-        private void ColorPixels(int x, int y, Bitmap bm)
+        public void ColorPixel(int x, int y, Bitmap bm)
         {
             if (!IsInBound(x, y, bm)) return;
             bm.SetPixel(x, y, myColor);
