@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using WpfAppComputerGraphics2.Separate;
 using System.Windows.Media.Imaging;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
-using System.Drawing;
 
 namespace WpfAppComputerGraphics2.Shapes
 {
@@ -64,6 +62,6 @@ namespace WpfAppComputerGraphics2.Shapes
             return $"Polygon ({GetCenter().X},{GetCenter().Y})";
         }
 
-        public BitmapImage Render(BitmapImage bmi) { return bmi; }
+        public WriteableBitmap Render(WriteableBitmap wbm) { return wbm; }
     }
 }

@@ -14,7 +14,7 @@ namespace WpfAppComputerGraphics2
     {
         Color myColor { get; set; }
         Point GetCenter();
-        BitmapImage Render(BitmapImage bmi);
+        WriteableBitmap Render(WriteableBitmap wbm);
         string Save();
         string GetNameAndCenter();
     }
