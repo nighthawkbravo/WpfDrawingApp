@@ -57,6 +57,18 @@ namespace WpfAppComputerGraphics2
             {
                 LineThickBox.Background = (Brush)bc.ConvertFrom(mylightGreen);
                 LineThickValue = thick;
+
+                if (SelectedShape != null && SelectedShape is Line)
+                {
+                    var line = (Line)SelectedShape;
+                    layers.Remove(SelectedShape);
+                    
+                    layers.Add(new Line(line.P1, line.P2, LineThickValue));
+
+                    SelectedShape = null;
+                    SelectedObject.Text = "None";
+                    RenderLayers();
+                }
             }
             else
             {
@@ -100,7 +112,6 @@ namespace WpfAppComputerGraphics2
         {
             myImage.Source = Bitmap2BitmapImage(b); ;
         }
-
         private IShape FindClosestShape(Point p)
         {
             IShape res = null;
@@ -130,6 +141,7 @@ namespace WpfAppComputerGraphics2
             clickCount = 0;
 
             lineDrawFlag = false;
+            lineMoveFlag = false;
             circleClickFlag = false;
             polyClickFlag = false;
             selectShapeFlag = false;
@@ -139,6 +151,7 @@ namespace WpfAppComputerGraphics2
         // ----- Flags -----
 
         private bool lineDrawFlag = false;
+        private bool lineMoveFlag = false;
 
         private bool circleClickFlag = false;
         private bool polyClickFlag = false;
@@ -182,7 +195,26 @@ namespace WpfAppComputerGraphics2
                     RenderLayers();
                 }
             } // Line Creating 
-            
+            if (lineMoveFlag)
+            {
+                CanvasPoints.Add(new Point(x, y));
+                clickCount--;
+                if (clickCount <= 0)
+                {
+                    var line = (Line)SelectedShape;
+                    var endPoint = line.FindClosestPoint(CanvasPoints[0]);
+                    var otherEP = line.GetOtherPoint(endPoint);
+                    layers.Remove(SelectedShape);
+                    layers.Add(new Line(CanvasPoints[1], otherEP, line.Thickness));
+                    
+                    lineMoveFlag = false;
+                    CanvasPoints.Clear();
+                    SelectedShape = null;
+                    SelectedObject.Text = "None";
+                    RenderLayers();
+                }
+            } // Line Moving 
+
         }
 
         // +----- Menu Buttons -----+
@@ -220,7 +252,17 @@ namespace WpfAppComputerGraphics2
                 clickCount = 2;                
             }
         }
-        
+
+        private void MoveLineEndpointButton(object sender, RoutedEventArgs e)
+        {
+            if (!lineMoveFlag && SelectedShape != null && SelectedShape is Line)
+            {
+                ResetFlagsAndCP();
+                lineMoveFlag = true;
+                clickCount = 2;
+            }
+        }
+
 
 
 
@@ -272,5 +314,6 @@ namespace WpfAppComputerGraphics2
                 return new Bitmap(bitmap);
             }
         }
+
     }
 }

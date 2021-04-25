@@ -120,7 +120,7 @@
                     <Button Grid.Column="0" Margin="20,2" Click="DeleteShapeButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Delete" FontSize="16"/>
                     </Button>
-                    <Button Grid.Column="1" Margin="20,2">
+                    <Button Grid.Column="1" Margin="20,2" Click="MoveLineEndpointButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Endpoint" FontSize="16"/>
                     </Button>
                 </Grid>

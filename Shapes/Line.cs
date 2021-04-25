@@ -275,9 +275,9 @@ namespace WpfAppComputerGraphics2.Shapes
                 ColorPixels(x, y, bm);
             }
         }
-
         private void ColorPixels(int x, int y, Bitmap bm)
         {
+            if (!IsInBound(x, y, bm)) return;
             bm.SetPixel(x, y, myColor);
             
 
@@ -295,30 +295,13 @@ namespace WpfAppComputerGraphics2.Shapes
 
                         if (X*X + Y*Y < r*r)
                         {
+                            if (!IsInBound(x, y, bm)) continue;
                             bm.SetPixel(i, j, myColor);
                         }
                     }
                 }
-
-                //for (int i = 0; i < N; i++)
-                //{
-                //    for (int j = 0; j < N; j++)
-                //    {
-                //        X = i - r;
-                //        Y = j - r;
-
-                //        if (X * X + Y * Y <= r * r + 1)
-                //        {
-                //            X = x + i - r;
-                //            Y = y + j - r;
-                //            //MessageBox.Show($"COLORING - {X},{Y}");
-                //            bm.SetPixel(X, Y, myColor);
-                //        }
-                //    }
-                //}
             }
         }
-
         public bool IsInBound(int x, int y, Bitmap bm)
         {
             if (x>0 && x<bm.Width && y>0 && y<bm.Height)
@@ -326,6 +309,43 @@ namespace WpfAppComputerGraphics2.Shapes
                 return true;
             }
             return false;
+        }
+
+        public Point GetPoint(Point a)
+        {
+            if (a == P1) return a;
+            else return P2;
+        }
+        public Point GetOtherPoint(Point a)
+        {
+            if (a == P1) return P2;
+            else return P1;
+        }
+
+        public Point FindClosestPoint(Point a)
+        {
+            Point res = a;
+            double sum = double.PositiveInfinity;
+
+            List<Point> pts = new List<Point>();
+            pts.Add(P1);
+            pts.Add(P2);
+
+            foreach (var p in pts)
+            {
+                var v = CalcEucliDist(p, a);
+                if (v < sum)
+                {
+                    sum = v;
+                    res = p;
+                }
+            }
+
+            return res;
+        }
+        private double CalcEucliDist(Point p1, Point p2)
+        {
+            return Math.Sqrt(Math.Pow(p2.Y - p1.Y, 2) + Math.Pow(p2.X - p1.X, 2));
         }
     }
 }
