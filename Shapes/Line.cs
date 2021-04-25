@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
+using Bitmap = System.Drawing.Bitmap;
 
 namespace WpfAppComputerGraphics2.Shapes
 {
@@ -40,11 +41,14 @@ namespace WpfAppComputerGraphics2.Shapes
             return $"Line ({GetCenter().X},{GetCenter().Y})";
         }
 
-        public WriteableBitmap Render(WriteableBitmap wbm)
+        public Bitmap Render(Bitmap bm)
         {
-            
 
-            return null;            
+            bm.SetPixel(P1.X, P1.Y, myColor);
+
+            bm.SetPixel(P2.X, P2.Y, myColor);
+
+            return bm;            
         }
     }
 }

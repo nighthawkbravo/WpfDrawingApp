@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
+using Bitmap = System.Drawing.Bitmap;
 
 namespace WpfAppComputerGraphics2.Shapes
 {
@@ -38,6 +39,6 @@ namespace WpfAppComputerGraphics2.Shapes
             return $"Circle ({GetCenter().X},{GetCenter().Y})";
         }
 
-        public WriteableBitmap Render(WriteableBitmap wbm) { return wbm; }
+        public Bitmap Render(Bitmap bm) { return bm; }
     }
 }

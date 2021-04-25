@@ -14,26 +14,25 @@ using System.Windows.Navigation;
 using WpfAppComputerGraphics2.Shapes;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
-
+using Bitmap = System.Drawing.Bitmap;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace WpfAppComputerGraphics2
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        // The BitmapImage that is being drawn on.
-        private BitmapImage bmi;
+        private const int width = 800;
+        private const int height = 795;
 
-        private List<IShape> layers;
+        private Bitmap bm;
+        private Bitmap blankBM;
 
-        private bool lineClickFlag = false;
-        private int lineClickNum = 0;
-
-        private bool circleClickFlag = false;
-        private bool polyClickFlag = false;
+        private List<IShape> layers;        
         private List<Point> CanvasPoints;
+        private int clickCount = 0;
+
+        private IShape SelectedShape = null;
 
         private int LineThickValue;
         private int PolyThickValue;
@@ -47,6 +46,10 @@ namespace WpfAppComputerGraphics2
             InitializeComponent();
             layers = new List<IShape>();
             CanvasPoints = new List<Point>();
+
+            bm = new Bitmap(width, height);
+            blankBM = new Bitmap(width, height);
+            DisplayImage(bm);
         }
 
         private void LineThickChange(object sender, TextChangedEventArgs e)
@@ -90,15 +93,38 @@ namespace WpfAppComputerGraphics2
         {
             foreach(var shape in layers)
             {
-                bmi = shape.Render(bmi);
+                bm = shape.Render(bm);
             }
-            DisplayImageFromBMI(bmi);
-            //MessageBox.Show("Rendering");
+            DisplayImage(bm);
         }
-        private void DisplayImageFromBMI(BitmapImage bmi)
+        private void DisplayImage(Bitmap b)
         {
-            myImage.Source = bmi;
+            myImage.Source = Bitmap2BitmapImage(b); ;
         }
+
+        private IShape FindClosestShape(Point p)
+        {
+            IShape res = null;
+            double sum = double.PositiveInfinity;
+
+            foreach (var sh in layers)
+            {
+                var v = CalcEucliDist(p, sh.GetCenter());
+                if (v < sum)
+                {
+                    sum = v; 
+                    res = sh;
+                }
+            }
+
+            return res;
+        }
+        private double CalcEucliDist(Point p1, Point p2)
+        {
+            return Math.Sqrt(Math.Pow(p2.Y - p1.Y, 2) + Math.Pow(p2.X - p1.X, 2));
+        }
+
+
         private void ResetFlagsAndCP()
         {
             CanvasPoints.Clear();
@@ -106,29 +132,77 @@ namespace WpfAppComputerGraphics2
             lineClickFlag = false;
             circleClickFlag = false;
             polyClickFlag = false;
+            selectClickFlag = false;
         }
+
+
+        // ----- Flags -----
+
+        private bool lineClickFlag = false;
+
+        private bool circleClickFlag = false;
+        private bool polyClickFlag = false;
+        private bool selectClickFlag = false;
 
 
         private void ImageMouseDown(object sender, MouseButtonEventArgs e)
         {
+            int x = (int)e.GetPosition(myImage).X;
+            int y = (int)e.GetPosition(myImage).Y;
+
+            if (selectClickFlag)
+            {
+                var p = new Point(x, y);
+                CanvasPoints.Add(p);
+                clickCount--;
+                if (clickCount <= 0)
+                {
+                    SelectedShape = FindClosestShape(p);
+                    CanvasPoints.Clear();
+                    selectClickFlag = false;
+                    if (SelectedShape != null)
+                    {
+                        SelectedObject.Text = SelectedShape.GetNameAndCenter();
+                        //MessageBox.Show($"{SelectedShape.GetNameAndCenter()}");
+                    }
+                    else
+                    {
+                        SelectedObject.Text = "None";
+                    }
+                }
+            } // Select Handling
+
+
             if (lineClickFlag)
             {
-                int x = (int)e.GetPosition(myImage).X;
-                int y = (int)e.GetPosition(myImage).Y;
                 CanvasPoints.Add(new Point(x, y));
-                lineClickNum--;
-                if (lineClickNum <= 0)
+                clickCount--;
+                if (clickCount <= 0)
                 {
                     layers.Add(new Line(CanvasPoints[0], CanvasPoints[1]));
-                    //MessageBox.Show($"{CanvasPoints[0]} - {CanvasPoints[1]}");
                     CanvasPoints.Clear();
                     lineClickFlag = false;
                     RenderLayers();
                 }
             } // Line Handling
+
         }
 
-        // ----- Menu Buttons -----
+        // +----- Menu Buttons -----+
+
+        // ----- Mouse Coordinates -----
+        private void SelectButton(object sender, RoutedEventArgs e)
+        {
+            if (!selectClickFlag)
+            {
+                ResetFlagsAndCP();
+                selectClickFlag = true;
+                clickCount = 1;                
+            }            
+        }
+
+
+
 
         // ----- Line -----
         private void DrawLineButton(object sender, RoutedEventArgs e)
@@ -137,8 +211,21 @@ namespace WpfAppComputerGraphics2
             {
                 ResetFlagsAndCP();
                 lineClickFlag = true;
-                lineClickNum = 2;                
+                clickCount = 2;                
             }
+        }
+
+
+
+
+        
+
+
+        private void ClearCanvasButton(object sender, RoutedEventArgs e)
+        {
+            layers.Clear();
+            bm = blankBM;            
+            DisplayImage(bm);
         }
 
 
@@ -147,10 +234,39 @@ namespace WpfAppComputerGraphics2
 
 
 
-        private void ClearCanvasButton(object sender, RoutedEventArgs e)
+
+
+        // Converts Bitmaps to BitmapImages.
+        private BitmapImage Bitmap2BitmapImage(Bitmap bitmap)
         {
-            layers.Clear();
-            DisplayImageFromBMI(null);
+            using (var memory = new MemoryStream())
+            {
+                bitmap.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
+
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
+
+                return bitmapImage;
+            }
+        }
+
+        // Converts BitmapImages to Bitmaps
+        private Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
+        {
+            using (MemoryStream outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create(bitmapImage));
+                enc.Save(outStream);
+                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(outStream);
+
+                return new Bitmap(bitmap);
+            }
         }
     }
 }

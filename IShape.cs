@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
+using Bitmap = System.Drawing.Bitmap;
 
 namespace WpfAppComputerGraphics2
 {
@@ -14,7 +15,7 @@ namespace WpfAppComputerGraphics2
     {
         Color myColor { get; set; }
         Point GetCenter();
-        WriteableBitmap Render(WriteableBitmap wbm);
+        Bitmap Render(Bitmap wbm);
         string Save();
         string GetNameAndCenter();
     }

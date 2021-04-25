@@ -5,17 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfAppComputerGraphics2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="810" Width="1200" ResizeMode="NoResize">
+        Title="MainWindow" Height="835" Width="1200" ResizeMode="NoResize">
     <Grid Background="#FF858585">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="810"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5">
-            <Canvas Background="White" MouseMove="ImageMouseMove" MouseLeave="ImageMouseLeave" MouseDown="ImageMouseDown">
-                <Image Name="myImage"/>
-            </Canvas>
-        </Border> <!-- Canvas Column -->
+            <Grid Background="White" MouseMove="ImageMouseMove" MouseLeave="ImageMouseLeave" MouseDown="ImageMouseDown">
+                <Image Name="myImage" Stretch="Fill" Width="800" Height="795" />
+                <!--Width="800" Height="800" Stretch="Fill"-->
+            </Grid>
+        </Border>
+        <!-- Canvas Column -->
 
         <Grid Grid.Column="1" Margin="0,0,5,0">
             <Grid.RowDefinitions>
@@ -32,7 +34,7 @@
                 <RowDefinition Height="*"/>
 
                 <RowDefinition Height="2"/>
-                <RowDefinition Height="100"/>                
+                <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Margin="0,5">
                 <Grid.RowDefinitions>
@@ -42,7 +44,8 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Mouse Coordinates" FontSize="16" TextDecorations="Underline"/>
-                </Grid> <!-- Mouse Coordinates Text -->
+                </Grid>
+                <!-- Mouse Coordinates Text -->
                 <Grid Grid.Row="1">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -52,22 +55,26 @@
                         <TextBlock Name="MouseXText" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="X: -" FontSize="16"/>
                         <TextBlock Name="MouseYText" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Y: -" FontSize="16"/>
                     </Grid>
-                </Grid> <!-- X and Y Text -->
+                </Grid>
+                <!-- X and Y Text -->
                 <Grid Grid.Row="2">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Margin="20,2">
+                        <Button Grid.Column="0" Margin="20,2" Click="SelectButton">
                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Select" FontSize="16"/>
                         </Button>
                         <Border Grid.Column="1" Margin="15,2" BorderBrush="Black" BorderThickness="1">
-                            <TextBlock Name="SelectedObject"  HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="None" FontSize="12"/> <!-- 23 characters max -->
-                        </Border>                        
+                            <TextBlock Name="SelectedObject"  HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="None" FontSize="12"/>
+                            <!-- 23 characters max -->
+                        </Border>
                     </Grid>
-                </Grid> <!-- Selection and Selected -->
-            </Grid> <!-- First Section - Mouse XY and select -->
+                </Grid>
+                <!-- Selection and Selected -->
+            </Grid>
+            <!-- First Section - Mouse XY and select -->
             <Grid Grid.Row="1" Background="Black"></Grid>
             <Grid Grid.Row="2" Margin="0,5">
                 <Grid.RowDefinitions>
@@ -94,7 +101,8 @@
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Thickness:" FontSize="16"  Grid.Column="0"/>
                         <TextBox Name="LineThickBox" Grid.Column="1"  TextAlignment="Center" Text="1" TextChanged="LineThickChange"/>
                     </Grid>
-                </Grid> <!-- Draw and thickness -->
+                </Grid>
+                <!-- Draw and thickness -->
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -106,9 +114,11 @@
                     <Button Grid.Column="1" Margin="20,2">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Endpoint" FontSize="16"/>
                     </Button>
-                </Grid> <!-- Delete and move endpoint -->
+                </Grid>
+                <!-- Delete and move endpoint -->
 
-            </Grid> <!-- Second Section - Line -->
+            </Grid>
+            <!-- Second Section - Line -->
             <Grid Grid.Row="3" Background="Black"></Grid>
             <Grid Grid.Row="4" Margin="0,5">
                 <Grid.RowDefinitions>
@@ -130,7 +140,8 @@
                     <Button Grid.Column="1" Margin="20,2">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Center" FontSize="16"/>
                     </Button>
-                </Grid> <!-- Draw and move center -->
+                </Grid>
+                <!-- Draw and move center -->
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -142,9 +153,11 @@
                     <Button Grid.Column="1" Margin="20,2">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Edge Point" FontSize="16"/>
                     </Button>
-                </Grid> <!-- Delete and move endpoint -->
-            </Grid> <!-- Third Section - Circle -->
-            <Grid Grid.Row="5" Background="Black"></Grid>            
+                </Grid>
+                <!-- Delete and move endpoint -->
+            </Grid>
+            <!-- Third Section - Circle -->
+            <Grid Grid.Row="5" Background="Black"></Grid>
             <Grid Grid.Row="6" Margin="0,5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -171,7 +184,8 @@
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Thickness:" FontSize="16"  Grid.Column="0"/>
                         <TextBox Name="PolyThickBox" Grid.Column="1"  TextAlignment="Center" Text="1" TextChanged="PolyThickChange"/>
                     </Grid>
-                </Grid> <!-- Draw and thickness -->
+                </Grid>
+                <!-- Draw and thickness -->
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -183,7 +197,8 @@
                     <Button Grid.Column="1" Margin="20,2">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Vertex" FontSize="16"/>
                     </Button>
-                </Grid> <!-- Delete and move vertex -->
+                </Grid>
+                <!-- Delete and move vertex -->
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -195,10 +210,12 @@
                     <Button Grid.Column="1" Margin="20,2">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Edge" FontSize="16"/>
                     </Button>
-                </Grid> <!-- Move center and move edge -->
-            </Grid> <!-- Forth Section - Polygon -->
+                </Grid>
+                <!-- Move center and move edge -->
+            </Grid>
+            <!-- Forth Section - Polygon -->
             <Grid Grid.Row="7" Background="Black"></Grid>
-            
+
             <Grid Grid.Row="10" Background="Black"></Grid>
             <Grid Grid.Row="11" Margin="0,5">
                 <Grid.RowDefinitions>
@@ -216,7 +233,8 @@
                     <Button Grid.Column="1" Margin="20,2">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="OFF Anti-Aliasing" FontSize="16"/>
                     </Button>
-                </Grid> <!-- Clear and anti-aliasing -->
+                </Grid>
+                <!-- Clear and anti-aliasing -->
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -228,13 +246,16 @@
                     <Button Grid.Column="1" Margin="20,2">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Load Vectors" FontSize="16"/>
                     </Button>
-                </Grid> <!-- Save and load -->
-            </Grid> <!-- Last Section -->
-        </Grid> <!-- Menu Column -->
+                </Grid>
+                <!-- Save and load -->
+            </Grid>
+            <!-- Last Section -->
+        </Grid>
+        <!-- Menu Column -->
     </Grid>
 </Window>
 
-    
+
 <!-- 
     
     <Grid Grid.Row="#" Margin="0,5">
