@@ -13,7 +13,16 @@
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5">
             <Grid Background="White" MouseMove="ImageMouseMove" MouseLeave="ImageMouseLeave" MouseDown="ImageMouseDown">
-                <Image Name="myImage" Stretch="Fill" Width="800" Height="795" />
+                <Image Name="myImage" Stretch="Fill" Width="800" Height="795" RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="-1"/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="180"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>
                 <!--Width="800" Height="800" Stretch="Fill"-->
             </Grid>
         </Border>
