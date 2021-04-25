@@ -15,6 +15,7 @@ using WpfAppComputerGraphics2.Shapes;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
 using Bitmap = System.Drawing.Bitmap;
+using ColorDialog = System.Windows.Forms.ColorDialog;
 using System.IO;
 using System.Drawing.Imaging;
 
@@ -547,6 +548,19 @@ namespace WpfAppComputerGraphics2
 
 
 
+
+        private void SelectColorButton(object sender, RoutedEventArgs e)
+        {
+            ColorDialog dlg = new ColorDialog();
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                //ChoosenColor
+                var mediacolor = System.Windows.Media.Color.FromArgb(dlg.Color.A, dlg.Color.R, dlg.Color.G, dlg.Color.B);
+
+                ColorButton.Foreground = new SolidColorBrush(mediacolor);
+                ChoosenColor = System.Drawing.Color.FromArgb(mediacolor.A, mediacolor.R, mediacolor.G, mediacolor.B);
+            }
+        }
         private void ClearCanvasButton(object sender, RoutedEventArgs e)
         {
             layers.Clear();
