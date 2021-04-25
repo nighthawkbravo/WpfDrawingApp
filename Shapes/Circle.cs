@@ -23,6 +23,12 @@ namespace WpfAppComputerGraphics2.Shapes
             EdgePoint = e;
             myColor = Color.Black;
         }
+        public Circle(Point c, Point e, Color b)
+        {
+            Center = c;
+            EdgePoint = e;
+            myColor = b;
+        }
         public Point GetCenter()
         {
             return Center;
@@ -70,64 +76,35 @@ namespace WpfAppComputerGraphics2.Shapes
         {
             int x = r, y = 0;
 
-            
-            // When radius is zero only a single
-            // point will be printed
             if (r > 0)
             {
-                //Console.Write("(" + (x + x_centre) + ", " + (-y + y_centre) + ")");
                 ColorPixel(x + x_centre, -y + y_centre, bm);
-                //Console.Write("(" + (y + x_centre) + ", " + (x + y_centre) + ")");
                 ColorPixel(y + x_centre, x + y_centre, bm);
-                //Console.WriteLine("(" + (-y + x_centre) + ", " + (x + y_centre) + ")");
                 ColorPixel(-y + x_centre, x + y_centre, bm);
             }
 
-            // Initialising the value of P
             int P = 1 - r;
             while (x > y)
             {
                 y++;
-
-                // Mid-point is inside or on the perimeter
                 if (P <= 0) P = P + 2 * y + 1;
-
-                // Mid-point is outside the perimeter
                 else
                 {
                     x--;
                     P = P + 2 * y - 2 * x + 1;
                 }
 
-                // All the perimeter points have already 
-                // been printed
                 if (x < y) break;
-
-                // Printing the generated point and its 
-                // reflection in the other octants after
-                // translation
-
-                //Console.Write("(" + (x + x_centre) + ", " + (y + y_centre) + ")");
                 ColorPixel(x + x_centre, y + y_centre, bm);
-                //Console.Write("(" + (-x + x_centre) + ", " + (y + y_centre) + ")");
                 ColorPixel(-x + x_centre, y + y_centre, bm);
-                //Console.Write("(" + (x + x_centre) + ", " + (-y + y_centre) + ")");
                 ColorPixel(x + x_centre, -y + y_centre, bm);
-                //Console.WriteLine("(" + (-x + x_centre) + ", " + (-y + y_centre) + ")");
                 ColorPixel(-x + x_centre, -y + y_centre, bm);
 
-                // If the generated point is on the 
-                // line x = y then the perimeter points
-                // have already been printed
                 if (x != y)
                 {
-                    //Console.Write("(" + (y + x_centre) + ", " + (x + y_centre) + ")");
                     ColorPixel(y + x_centre, x + y_centre, bm);
-                    //Console.Write("(" + (-y + x_centre) + ", " + (x + y_centre) + ")");
                     ColorPixel(-y + x_centre, x + y_centre, bm);
-                    //Console.Write("(" + (y + x_centre) + ", " + (-x + y_centre) + ")");
                     ColorPixel(y + x_centre, -x + y_centre, bm);
-                    //Console.WriteLine("(" + (-y + x_centre) + ", " + (-x + y_centre) + ")");
                     ColorPixel(-y + x_centre, -x + y_centre, bm);
                 }
             }
