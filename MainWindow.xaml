@@ -182,7 +182,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="20,2">
+                    <Button Grid.Column="0" Margin="20,2" Click="DrawPolyButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Draw" FontSize="16"/>
                     </Button>
                     <Grid Grid.Column="1" Margin="20,2">
@@ -200,10 +200,10 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="20,2">
+                    <Button Grid.Column="0" Margin="20,2" Click="MovePolygonButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Center" FontSize="16"/>
                     </Button>
-                    <Button Grid.Column="1" Margin="20,2">
+                    <Button Grid.Column="1" Margin="20,2" Click="MovePolyVertexButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Vertex" FontSize="16"/>
                     </Button>
                 </Grid>
@@ -216,7 +216,7 @@
                     <Button Grid.Column="0" Margin="20,2" Click="DeleteShapeButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Delete" FontSize="16"/>
                     </Button>
-                    <Button Grid.Column="1" Margin="20,2">
+                    <Button Grid.Column="1" Margin="20,2" Click="MovePolyEdgeButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Edge" FontSize="16"/>
                     </Button>
                 </Grid>
