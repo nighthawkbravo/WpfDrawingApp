@@ -26,7 +26,6 @@ namespace WpfAppComputerGraphics2
         private const int height = 795;
 
         private Bitmap bm;
-        private Bitmap blankBM;
 
         private List<IShape> layers;        
         private List<Point> CanvasPoints;
@@ -48,7 +47,6 @@ namespace WpfAppComputerGraphics2
             CanvasPoints = new List<Point>();
 
             bm = new Bitmap(width, height);
-            blankBM = new Bitmap(width, height);
             DisplayImage(bm);
         }
 
@@ -224,7 +222,7 @@ namespace WpfAppComputerGraphics2
         private void ClearCanvasButton(object sender, RoutedEventArgs e)
         {
             layers.Clear();
-            bm = blankBM;            
+            bm = new Bitmap(width, height);
             DisplayImage(bm);
         }
 
