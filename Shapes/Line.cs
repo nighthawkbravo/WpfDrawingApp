@@ -40,6 +40,11 @@ namespace WpfAppComputerGraphics2.Shapes
             return $"Line ({GetCenter().X},{GetCenter().Y})";
         }
 
-        public BitmapImage Render(BitmapImage bmi) { return null; }
+        public WriteableBitmap Render(WriteableBitmap wbm)
+        {
+            
+
+            return null;            
+        }
     }
 }
