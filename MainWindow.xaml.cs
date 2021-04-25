@@ -52,7 +52,7 @@ namespace WpfAppComputerGraphics2
 
         private void LineThickChange(object sender, TextChangedEventArgs e)
         {
-            int thick=0;
+            int thick=1;
             if(Int32.TryParse(LineThickBox.Text, out thick) && thick % 2 != 0)
             {
                 LineThickBox.Background = (Brush)bc.ConvertFrom(mylightGreen);
@@ -65,7 +65,7 @@ namespace WpfAppComputerGraphics2
         }
         private void PolyThickChange(object sender, TextChangedEventArgs e)
         {
-            int thick = 0;
+            int thick = 1;
             if (Int32.TryParse(LineThickBox.Text, out thick) && thick % 2 != 0)
             {
                 PolyThickBox.Background = (Brush)bc.ConvertFrom(mylightGreen);
@@ -177,7 +177,7 @@ namespace WpfAppComputerGraphics2
                 clickCount--;
                 if (clickCount <= 0)
                 {
-                    layers.Add(new Line(CanvasPoints[0], CanvasPoints[1]));
+                    layers.Add(new Line(CanvasPoints[0], CanvasPoints[1], LineThickValue));
                     CanvasPoints.Clear();
                     lineClickFlag = false;
                     RenderLayers();
