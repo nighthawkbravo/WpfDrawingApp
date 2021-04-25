@@ -38,7 +38,7 @@ namespace WpfAppComputerGraphics2.Shapes
         }
         public string Save()
         {
-            return $"Line({Thickness}): ({P1.X},{P1.Y})-({P2.X},{P2.Y})";
+            return $"Line{Thickness},{myColor.R},{myColor.G},{myColor.B},:{P1.X},{P1.Y},{P2.X},{P2.Y},;";
         }
         public string GetNameAndCenter()
         {

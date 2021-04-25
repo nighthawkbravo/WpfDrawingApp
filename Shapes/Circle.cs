@@ -35,7 +35,7 @@ namespace WpfAppComputerGraphics2.Shapes
         }
         public string Save()
         {
-            return $"Circle: ({Center.X},{Center.Y})-({EdgePoint.X},{EdgePoint.Y})";
+            return $"Circle{myColor.R},{myColor.G},{myColor.B},:{Center.X},{Center.Y},{EdgePoint.X},{EdgePoint.Y},;";
         }
         public string GetNameAndCenter()
         {

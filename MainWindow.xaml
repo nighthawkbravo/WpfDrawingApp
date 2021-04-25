@@ -259,10 +259,10 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="20,2">
+                    <Button Grid.Column="0" Margin="20,2" Click="SaveVectorsButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Save Vectors" FontSize="16"/>
                     </Button>
-                    <Button Grid.Column="1" Margin="20,2">
+                    <Button Grid.Column="1" Margin="20,2" Click="LoadVectorsButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Load Vectors" FontSize="16"/>
                     </Button>
                 </Grid> <!-- Save and load -->

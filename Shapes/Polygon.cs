@@ -70,12 +70,16 @@ namespace WpfAppComputerGraphics2.Shapes
         }
         public string Save()
         {
-            string res = $"Polygon({numOfPoints}): ";
+            string res = $"Polygon{Thickness},{myColor.R},{myColor.G},{myColor.B},:";
 
             foreach(var p in Points)
             {
-                res += $"({p.X},{p.Y})";
+                res += $"{p.X},{p.Y},";
             }
+            StringBuilder sb = new StringBuilder(res);
+            res = sb.ToString();
+            res = res + ";";
+            
 
             return res;
         }

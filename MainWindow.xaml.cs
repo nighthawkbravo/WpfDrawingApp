@@ -1,23 +1,20 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+using System.Drawing.Imaging;
 using WpfAppComputerGraphics2.Shapes;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
 using Bitmap = System.Drawing.Bitmap;
 using ColorDialog = System.Windows.Forms.ColorDialog;
-using System.IO;
-using System.Drawing.Imaging;
+using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
+using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
+using System.Text;
 
 namespace WpfAppComputerGraphics2
 {
@@ -44,6 +41,8 @@ namespace WpfAppComputerGraphics2
         private string mylightGreen = "#42f548";
 
         private Color ChoosenColor = Color.Black;
+
+        private string AllShapes;
 
         public MainWindow()
         {
@@ -222,6 +221,7 @@ namespace WpfAppComputerGraphics2
                 if (clickCount <= 0)
                 {
                     layers.Add(new Line(CanvasPoints[0], CanvasPoints[1], ChoosenColor, LineThickValue));
+                    lineDrawFlag = false;
                     EndStepOfMouseDown();
                 }
             } // Line Drawing 
@@ -547,7 +547,7 @@ namespace WpfAppComputerGraphics2
         }
 
 
-
+        // ----- More menu stuff -----
 
         private void SelectColorButton(object sender, RoutedEventArgs e)
         {
@@ -566,6 +566,175 @@ namespace WpfAppComputerGraphics2
             layers.Clear();
             RenderLayers();
         }
+        private void SaveVectorsButton(object sender, RoutedEventArgs e)
+        {
+            AllShapes = "BEGIN\n";
+            foreach(var sh in layers)
+            {
+                AllShapes = AllShapes + $"{sh.Save()}\n";
+            }
+            AllShapes = AllShapes + "END";
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text file (*.txt)|*.txt|C# file (*.cs)|*.cs";
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) File.WriteAllText(saveFileDialog.FileName, AllShapes);
+        }
+        private void LoadVectorsButton(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text file (*.txt)|*.txt|C# file (*.cs)|*.cs";
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) AllShapes = File.ReadAllText(openFileDialog.FileName);
+
+
+            string firstline, line = "";
+            StringBuilder sb;
+            StringReader strReader = new StringReader(AllShapes);
+
+            firstline = strReader.ReadLine();
+            if(firstline != "BEGIN")
+            {
+                MessageBox.Show("File Not Formated");
+                return;
+            }
+            while (true)
+            {
+                line = strReader.ReadLine();
+                sb = new StringBuilder(line);
+                if (sb.ToString(0, 3) == "BEG") continue;
+                if (sb.ToString(0, 3) == "END") break;
+
+
+                if (sb.ToString(0, 4) == "Line")
+                {
+                    List<int> nums = new List<int>();
+
+                    int i;
+                    string tmp = "";
+                    for (i = 4; sb[i] != ':'; i++)
+                    {
+                        if(sb[i] != ',')
+                        {
+                            tmp += sb[i];
+                        }
+                        else
+                        {
+                            nums.Add(Int32.Parse(tmp));
+                            tmp = "";
+                        }
+                    }
+                    i++;
+                    for (; sb[i] != ';'; i++)
+                    {
+                        if (sb[i] != ',')
+                        {
+                            tmp += sb[i];
+                        }
+                        else
+                        {
+                            nums.Add(Int32.Parse(tmp));
+                            tmp = "";
+                        }
+                    }
+                    layers.Add(new Line(new Point(nums[4], nums[5]), new Point(nums[6], nums[7]), Color.FromArgb(255, nums[1], nums[2], nums[3]), nums[0]));
+                }
+                if (sb.ToString(0, 6) == "Circle")
+                {
+                    List<int> nums = new List<int>();
+
+                    int i;
+                    string tmp = "";
+                    for (i = 6; sb[i] != ':'; i++)
+                    {
+                        if (sb[i] != ',')
+                        {
+                            tmp += sb[i];
+                        }
+                        else
+                        {
+                            nums.Add(Int32.Parse(tmp));
+                            tmp = "";
+                        }
+                    }
+                    i++;
+                    for (; sb[i] != ';'; i++)
+                    {
+                        if (sb[i] != ',')
+                        {
+                            tmp += sb[i];
+                        }
+                        else
+                        {
+                            nums.Add(Int32.Parse(tmp));
+                            tmp = "";
+                        }
+                    }
+                    layers.Add(new Circle(new Point(nums[3], nums[4]), new Point(nums[5], nums[6]), Color.FromArgb(255, nums[0], nums[1], nums[2])));
+                }
+                if (sb.ToString(0, 7) == "Polygon")
+                {
+                    List<int> lenAndRGBs = new List<int>(4);
+                    List<int> coords = new List<int>();
+                    List<Point> pts = new List<Point>();
+
+
+
+                    int i;
+                    string tmp = "";
+                    for (i = 7; sb[i] != ':'; i++)
+                    {
+                        if (sb[i] != ',')
+                        {
+                            tmp += sb[i];
+                        }
+                        else
+                        {
+                            lenAndRGBs.Add(Int32.Parse(tmp));
+                            tmp = "";
+                        }
+                    }
+                    i++;
+                    for (; sb[i] != ';'; i++)
+                    {
+                        if (sb[i] != ',')
+                        {
+                            tmp += sb[i];
+                        }
+                        else
+                        {
+                            coords.Add(Int32.Parse(tmp));
+                            tmp = "";
+                        }
+                    }
+
+
+
+                    for (int j = 0; j < coords.Count - 1; j+=2)
+                    {
+                        pts.Add(new Point(coords[j], coords[j + 1]));
+                    }
+                    layers.Add(new Polygon(pts, Color.FromArgb(255, lenAndRGBs[1], lenAndRGBs[2], lenAndRGBs[3])));
+                }
+            }
+            RenderLayers();
+        }
+
+        private int Parse3Chars(StringBuilder sb, int index, out int i)
+        {
+            int v = -1; i = 0;
+            if (Int32.TryParse(sb.ToString(index, 1), out v))
+            {
+                i = 0;
+                if (Int32.TryParse(sb.ToString(index, 2), out v))
+                {
+                    i = 1;
+                    if (Int32.TryParse(sb.ToString(index, 3), out v))
+                    {
+                        i = 2;
+                    }
+                }
+            }
+            return v;
+        }
+
 
 
 
