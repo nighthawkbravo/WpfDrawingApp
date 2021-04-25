@@ -25,6 +25,13 @@ namespace WpfAppComputerGraphics2.Shapes
             Thickness = t;
             myColor = Color.Black;
         }
+        public Line(Point p1, Point p2, Color b, int t = 1)
+        {
+            P1 = p1;
+            P2 = p2;
+            Thickness = t;
+            myColor = b;
+        }
         public Point GetCenter()
         {
             return new Point((P1.X + P2.X) / 2, (P1.Y + P2.Y) / 2);
@@ -321,7 +328,6 @@ namespace WpfAppComputerGraphics2.Shapes
             if (a == P1) return P2;
             else return P1;
         }
-
         public Point FindClosestPoint(Point a)
         {
             Point res = a;
