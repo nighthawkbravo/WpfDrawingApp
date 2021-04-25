@@ -22,7 +22,7 @@ namespace WpfAppComputerGraphics2
 {
     public partial class MainWindow : Window
     {
-        private const int width = 800;
+        private const int width = 795;
         private const int height = 795;
 
         private Bitmap bm;
@@ -142,7 +142,9 @@ namespace WpfAppComputerGraphics2
 
             lineDrawFlag = false;
             lineMoveFlag = false;
-            circleClickFlag = false;
+            circleDrawFlag = false;
+            circleMoveFlag = false;
+            circleMoveEPFlag = false;
             polyClickFlag = false;
             selectShapeFlag = false;
         }
@@ -153,7 +155,10 @@ namespace WpfAppComputerGraphics2
         private bool lineDrawFlag = false;
         private bool lineMoveFlag = false;
 
-        private bool circleClickFlag = false;
+        private bool circleDrawFlag = false;
+        private bool circleMoveFlag = false;
+        private bool circleMoveEPFlag = false;
+
         private bool polyClickFlag = false;
         private bool selectShapeFlag = false;
 
@@ -214,6 +219,67 @@ namespace WpfAppComputerGraphics2
                     RenderLayers();
                 }
             } // Line Moving 
+            if (circleDrawFlag)
+            {
+                CanvasPoints.Add(new Point(x, y));
+                clickCount--;
+                if (clickCount <= 0)
+                {
+                    layers.Add(new Circle(CanvasPoints[0], CanvasPoints[1]));
+                    CanvasPoints.Clear();
+                    circleDrawFlag = false;
+                    RenderLayers();
+                }
+            } // Circle Creating 
+            if (circleMoveFlag)
+            {
+                CanvasPoints.Add(new Point(x, y));
+                clickCount--;
+                if (clickCount <= 0)
+                {
+                    var cir = (Circle)SelectedShape;
+                    var c = cir.GetCenter();
+                    var ep = cir.EdgePoint;
+
+                    System.Windows.Point p1 = new System.Windows.Point(c.X, c.Y);
+                    System.Windows.Point p2 = new System.Windows.Point(CanvasPoints[0].X, CanvasPoints[0].Y);
+                    System.Windows.Point p3 = new System.Windows.Point(ep.X, ep.Y);
+
+                    Vector vectorFromCenter = System.Windows.Point.Subtract(p1, p2);
+                    var p4 = System.Windows.Point.Subtract(p3, vectorFromCenter);
+
+                    var newEp = new Point((int) p4.X, (int) p4.Y);
+
+
+                    layers.Remove(SelectedShape);
+                    layers.Add(new Circle(CanvasPoints[0], newEp));
+
+                    circleMoveFlag = false;
+                    CanvasPoints.Clear();
+                    SelectedShape = null;
+                    SelectedObject.Text = "None";
+                    RenderLayers();
+                }
+            } // Circle Moving
+            if (circleMoveEPFlag)
+            {
+                CanvasPoints.Add(new Point(x, y));
+                clickCount--;
+                if (clickCount <= 0)
+                {
+                    var cir = (Circle)SelectedShape;
+                    var c = cir.Center;
+
+                    layers.Remove(SelectedShape);
+                    layers.Add(new Circle(c, CanvasPoints[0]));
+
+                    circleMoveEPFlag = false;
+                    CanvasPoints.Clear();
+                    SelectedShape = null;
+                    SelectedObject.Text = "None";
+                    RenderLayers();
+                }
+            } // Circle Edgepoint Moving
 
         }
 
@@ -229,16 +295,20 @@ namespace WpfAppComputerGraphics2
                 clickCount = 1;                
             }            
         }
-
-
         private void DeleteShapeButton(object sender, RoutedEventArgs e)
         {
             if (SelectedShape != null)
             {
                 ResetFlagsAndCP();
+                string name = "Shape";
+
+                if (SelectedShape is Line) name = "Line";
+                if (SelectedShape is Circle) name = "Circle";
+                if (SelectedShape is Polygon) name = "Polygon";
+
                 layers.Remove(SelectedShape);
                 RenderLayers();
-                SelectedObject.Text = "Deleted Shape";
+                SelectedObject.Text = $"Deleted {name}";
             }
         }
 
@@ -252,7 +322,6 @@ namespace WpfAppComputerGraphics2
                 clickCount = 2;                
             }
         }
-
         private void MoveLineEndpointButton(object sender, RoutedEventArgs e)
         {
             if (!lineMoveFlag && SelectedShape != null && SelectedShape is Line)
@@ -260,6 +329,35 @@ namespace WpfAppComputerGraphics2
                 ResetFlagsAndCP();
                 lineMoveFlag = true;
                 clickCount = 2;
+            }
+        }
+
+        // ----- Circle -----
+        private void DrawCircleButton(object sender, RoutedEventArgs e)
+        {
+            if (!circleDrawFlag)
+            {
+                ResetFlagsAndCP();
+                circleDrawFlag = true;
+                clickCount = 2;
+            }
+        }
+        private void MoveCircleButton(object sender, RoutedEventArgs e)
+        {
+            if (!circleMoveFlag && SelectedShape != null && SelectedShape is Circle)
+            {
+                ResetFlagsAndCP();
+                circleMoveFlag = true;
+                clickCount = 1;
+            }
+        }
+        private void MoveCircleEP(object sender, RoutedEventArgs e)
+        {
+            if (!circleMoveEPFlag && SelectedShape != null && SelectedShape is Circle)
+            {
+                ResetFlagsAndCP();
+                circleMoveEPFlag = true;
+                clickCount = 1;
             }
         }
 
@@ -273,11 +371,6 @@ namespace WpfAppComputerGraphics2
             layers.Clear();
             RenderLayers();
         }
-
-
-
-
-
 
 
 
@@ -314,6 +407,5 @@ namespace WpfAppComputerGraphics2
                 return new Bitmap(bitmap);
             }
         }
-
     }
 }
