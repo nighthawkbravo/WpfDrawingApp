@@ -248,6 +248,7 @@ namespace WpfAppComputerGraphics2
                 if (clickCount <= 0)
                 {
                     layers.Add(new Circle(CanvasPoints[0], CanvasPoints[1], ChoosenColor));
+                    circleDrawFlag = false;
                     EndStepOfMouseDown();
                 }
             } // Circle Drawing 
@@ -424,10 +425,10 @@ namespace WpfAppComputerGraphics2
 
         private void EndStepOfMouseDown()
         {
-                    CanvasPoints.Clear();
-                    SelectedShape = null;
-                    SelectedObject.Text = "None";
-                    RenderLayers();
+            CanvasPoints.Clear();
+            SelectedShape = null;
+            SelectedObject.Text = "None";
+            RenderLayers();
         }
 
         // +----- Menu Buttons -----+
