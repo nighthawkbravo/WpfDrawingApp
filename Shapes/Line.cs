@@ -353,11 +353,5 @@ namespace WpfAppComputerGraphics2.Shapes
         {
             return Math.Sqrt(Math.Pow(p2.Y - p1.Y, 2) + Math.Pow(p2.X - p1.X, 2));
         }
-
-
-        private void blah()
-        {
-            
-        }
     }
 }
