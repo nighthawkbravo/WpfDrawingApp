@@ -15,7 +15,7 @@ namespace WpfAppComputerGraphics2
     {
         Color myColor { get; set; }
         Point GetCenter();
-        Bitmap Render(Bitmap wbm);
+        Bitmap Render(Bitmap wbm, bool aliasFlag);
         string Save();
         string GetNameAndCenter();
         //int Lower(int a, int b);

@@ -55,28 +55,35 @@ namespace WpfAppComputerGraphics2.Shapes
             else return b;
         }
 
-        public Bitmap Render(Bitmap bm)
+        public Bitmap Render(Bitmap bm, bool aliasFlag)
         {
-            // Vertical line
-            if (P1.X == P2.X)
+            if(aliasFlag)
             {
-                for (int i = Lower(P1.Y, P2.Y); i <= Greater(P1.Y, P2.Y); ++i)
-                {
-                    ColorPixel(P1.X, i, bm);
-                }
+                DrawAALine(P1.X, P1.Y, P2.X, P2.Y, bm);
             }
-            // Horizontal line
-            else if (P1.Y == P2.Y)
-            {
-                for (int i = Lower(P1.X, P2.X); i <= Greater(P1.X, P2.X); ++i)
-                {
-                    ColorPixel(i, P1.Y, bm);
-                }
-            }
-            // non Horizontal/Vertical line
             else
-            {
-                MidPtL(P1, P2, bm);
+            { 
+                // Vertical line
+                if (P1.X == P2.X)
+                {
+                    for (int i = Lower(P1.Y, P2.Y); i <= Greater(P1.Y, P2.Y); ++i)
+                    {
+                        ColorPixel(P1.X, i, bm);
+                    }
+                }
+                // Horizontal line
+                else if (P1.Y == P2.Y)
+                {
+                    for (int i = Lower(P1.X, P2.X); i <= Greater(P1.X, P2.X); ++i)
+                    {
+                        ColorPixel(i, P1.Y, bm);
+                    }
+                }
+                // non Horizontal/Vertical line
+                else
+                {
+                    MidPtL(P1, P2, bm);
+                }
             }
             return bm;
         }
@@ -352,6 +359,105 @@ namespace WpfAppComputerGraphics2.Shapes
         private double CalcEucliDist(Point p1, Point p2)
         {
             return Math.Sqrt(Math.Pow(p2.Y - p1.Y, 2) + Math.Pow(p2.X - p1.X, 2));
+        }
+
+
+        // ----- Anti-Aliasing -----
+        void drawPixel(int x, int y, float brightness, Bitmap bm)
+        {
+            if (!IsInBound(x, y, bm)) return;
+            bm.SetPixel(x, y, myColor);
+            int c = (int) (255 * brightness);
+            Color color = Color.FromArgb(255, c, c, c);            
+            bm.SetPixel(x, y, color);
+        }
+
+        private void Swap(ref int a, ref int b)
+        {
+            int temp = a;
+            a = b;
+            b = temp;
+        }
+
+        private float Absolute(float x)
+        {
+            if (x < 0) return -x;
+            else return x;
+        }
+
+        private int IPartOfNumber(double x)
+        {
+            return (int)x;
+        }
+        private float fPartOfNumber(float x)
+        {
+            if (x > 0) return x - IPartOfNumber(x);
+            else return x - (IPartOfNumber(x) + 1);
+
+        }
+        private float rfPartOfNumber(float x)
+        {
+            return 1 - fPartOfNumber(x);
+        }
+
+        private int RoundNumber(float x)
+        {
+            return IPartOfNumber(x + 0.5);
+        }
+        private void DrawAALine(int x0, int y0, int x1, int y1, Bitmap bm)
+        {
+            bool steep = Absolute(y1 - y0) > Absolute(x1 - x0);
+
+            // swap the co-ordinates if slope > 1 or we
+            // draw backwards
+            if (steep)
+            {
+                Swap(ref x0, ref y0);
+                Swap(ref x1, ref y1);
+            }
+            if (x0 > x1)
+            {
+                Swap(ref x0, ref x1);
+                Swap(ref y0, ref y1);
+            }
+
+            //compute the slope
+            float dx = x1 - x0;
+            float dy = y1 - y0;
+            float gradient = dy / dx;
+            if (dx == 0.0)
+                gradient = 1;
+
+            int xpxl1 = x0;
+            int xpxl2 = x1;
+            float intersectY = y0;
+
+            // main loop
+            if (steep)
+            {
+                int x;
+                for (x = xpxl1; x <= xpxl2; x++)
+                {
+                    // pixel coverage is determined by fractional
+                    // part of y co-ordinate
+                    drawPixel(IPartOfNumber(intersectY), x, rfPartOfNumber(intersectY), bm);
+                    drawPixel(IPartOfNumber(intersectY) - 1, x, fPartOfNumber(intersectY), bm);
+                    intersectY += gradient;
+                }
+            }
+            else
+            {
+                int x;
+                for (x = xpxl1; x <= xpxl2; x++)
+                {
+                    // pixel coverage is determined by fractional
+                    // part of y co-ordinate
+                    drawPixel(x, IPartOfNumber(intersectY), rfPartOfNumber(intersectY), bm);
+                    drawPixel(x, IPartOfNumber(intersectY) - 1, fPartOfNumber(intersectY), bm);
+                    intersectY += gradient;
+                }
+            }
+
         }
     }
 }

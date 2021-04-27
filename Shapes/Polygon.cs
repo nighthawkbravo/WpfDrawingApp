@@ -170,11 +170,11 @@ namespace WpfAppComputerGraphics2.Shapes
                 }
             }
         }
-        public Bitmap Render(Bitmap bm) 
+        public Bitmap Render(Bitmap bm, bool aliasFlag) 
         {
             foreach(var line in Edges)
             {
-                bm = line.Render(bm);
+                bm = line.Render(bm, aliasFlag);
             }
             return bm;
         }

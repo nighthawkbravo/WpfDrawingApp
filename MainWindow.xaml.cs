@@ -128,7 +128,7 @@ namespace WpfAppComputerGraphics2
             bm = new Bitmap(width, height);
             foreach (var shape in layers)
             {
-                bm = shape.Render(bm);
+                bm = shape.Render(bm, AliasingFlag);
             }
             DisplayImage(bm);
         }
@@ -587,8 +587,9 @@ namespace WpfAppComputerGraphics2
             {
                 AliasingFlag = true;
                 AntiAText.Text = "ON Anti-Aliasing";
+                
             }
-            
+            RenderLayers();
         }
 
         private void SelectColorButton(object sender, RoutedEventArgs e)

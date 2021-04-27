@@ -63,7 +63,7 @@ namespace WpfAppComputerGraphics2.Shapes
         {
             return Math.Sqrt(Math.Pow(p2.Y - p1.Y, 2) + Math.Pow(p2.X - p1.X, 2));
         }
-        public Bitmap Render(Bitmap bm)
+        public Bitmap Render(Bitmap bm, bool aliasFlag)
         {
             int r = (int)CalcEucliDist(Center, EdgePoint);
 

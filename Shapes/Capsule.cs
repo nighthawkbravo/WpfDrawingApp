@@ -60,7 +60,7 @@ namespace WpfAppComputerGraphics2.Shapes
             }
             return false;
         }
-        public Bitmap Render(Bitmap bm)
+        public Bitmap Render(Bitmap bm, bool aliasFlag)
         {
             var p1 = FindClosestPoint(EdgePoint);
             int r = (int) CalcEucliDist(p1, EdgePoint);
@@ -85,7 +85,7 @@ namespace WpfAppComputerGraphics2.Shapes
 
             foreach(var s in sides)
             {
-                s.Render(bm);
+                s.Render(bm, aliasFlag);
             }
 
             bm = midPointCircleDraw(Cp1.X, Cp1.Y, r, bm);
@@ -131,7 +131,6 @@ namespace WpfAppComputerGraphics2.Shapes
 
             return res;
         }
-
         private Bitmap midPointCircleDraw(int x_centre, int y_centre, int r, Bitmap bm)
         {
             int x = r, y = 0;
@@ -170,10 +169,6 @@ namespace WpfAppComputerGraphics2.Shapes
             }
             return bm;
         }
-
-
-
-
         private int check(Point c, Point ep, Point t)
         {
             var v = (ep.X - c.X) * (t.Y - c.Y) - (ep.Y - c.Y) * (t.X - c.X);
