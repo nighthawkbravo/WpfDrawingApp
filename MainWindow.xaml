@@ -232,7 +232,10 @@
                     </Grid.ColumnDefinitions>
                     <Button Name="ColorButton" Grid.Column="0" Margin="20,2" Click="SelectColorButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Color Selector" FontSize="16"/>
-                    </Button>                    
+                    </Button>
+                    <Button Name="CapsuleButton" Grid.Column="1" Margin="20,2" Click="DrawCapsuleButton">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Draw Capsule" FontSize="16"/>
+                    </Button>
                 </Grid> <!-- Color Picker -->
             </Grid>
 
@@ -250,8 +253,8 @@
                     <Button Grid.Column="0" Margin="20,2" Click="ClearCanvasButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Clear Canvas" FontSize="16"/>
                     </Button>
-                    <Button Grid.Column="1" Margin="20,2">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="OFF Anti-Aliasing" FontSize="16"/>
+                    <Button Grid.Column="1" Margin="20,2" Click="SwitchAntiAliasingButton">
+                        <TextBlock Name="AntiAText" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="OFF Anti-Aliasing" FontSize="16"/>
                     </Button>
                 </Grid> <!-- Clear and anti-aliasing -->
                 <Grid Grid.Row="1">

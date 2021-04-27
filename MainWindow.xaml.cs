@@ -35,6 +35,7 @@ namespace WpfAppComputerGraphics2
 
         private int LineThickValue;
         private int PolyThickValue;
+        public bool AliasingFlag = false;
 
         private BrushConverter bc = new BrushConverter();
         private string mylightRed = "#FF5555";
@@ -170,6 +171,7 @@ namespace WpfAppComputerGraphics2
             polyMoveFlag = false;
             polyMoveVertexFlag = false;
             polyMoveEdgeFlag = false;
+            capsuleDrawFlag = false;
             selectShapeFlag = false;
         }
 
@@ -185,6 +187,8 @@ namespace WpfAppComputerGraphics2
         private bool polyMoveFlag = false;
         private bool polyMoveVertexFlag = false;
         private bool polyMoveEdgeFlag = false;
+
+        private bool capsuleDrawFlag = false;
 
         private bool selectShapeFlag = false;
 
@@ -421,6 +425,17 @@ namespace WpfAppComputerGraphics2
                     EndStepOfMouseDown();
                 }
             } // Polygon moving Edge
+            if (capsuleDrawFlag)
+            {
+                CanvasPoints.Add(new Point(x, y));
+                clickCount--;
+                if (clickCount <= 0)
+                {
+                    layers.Add(new Capsule(CanvasPoints[0], CanvasPoints[1], CanvasPoints[2], ChoosenColor));
+                    capsuleDrawFlag = false;
+                    EndStepOfMouseDown();
+                }
+            } // Capsule Drawing 
         }
 
         private void EndStepOfMouseDown()
@@ -547,8 +562,34 @@ namespace WpfAppComputerGraphics2
             }
         }
 
+        // ----- Lab Assignment -----
+        private void DrawCapsuleButton(object sender, RoutedEventArgs e)
+        {
+            if (!capsuleDrawFlag)
+            {
+                ResetFlagsAndCP();
+                capsuleDrawFlag = true;
+                clickCount = 3;
+            }
+        }
+
 
         // ----- More menu stuff -----
+
+        private void SwitchAntiAliasingButton(object sender, RoutedEventArgs e)
+        {
+            if(AliasingFlag)
+            {
+                AliasingFlag = false;
+                AntiAText.Text = "OFF Anti-Aliasing";
+            }
+            else
+            {
+                AliasingFlag = true;
+                AntiAText.Text = "ON Anti-Aliasing";
+            }
+            
+        }
 
         private void SelectColorButton(object sender, RoutedEventArgs e)
         {
@@ -716,24 +757,6 @@ namespace WpfAppComputerGraphics2
                 }
             }
             RenderLayers();
-        }
-
-        private int Parse3Chars(StringBuilder sb, int index, out int i)
-        {
-            int v = -1; i = 0;
-            if (Int32.TryParse(sb.ToString(index, 1), out v))
-            {
-                i = 0;
-                if (Int32.TryParse(sb.ToString(index, 2), out v))
-                {
-                    i = 1;
-                    if (Int32.TryParse(sb.ToString(index, 3), out v))
-                    {
-                        i = 2;
-                    }
-                }
-            }
-            return v;
         }
 
 
