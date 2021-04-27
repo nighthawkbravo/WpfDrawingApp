@@ -363,11 +363,12 @@ namespace WpfAppComputerGraphics2.Shapes
 
 
         // ----- Anti-Aliasing -----
-        void drawPixel(int x, int y, float brightness, Bitmap bm)
+        void DrawPixel(int x, int y, float brightness, Bitmap bm)
         {
             if (!IsInBound(x, y, bm)) return;
             bm.SetPixel(x, y, myColor);
             int c = (int) (255 * brightness);
+
             Color color = Color.FromArgb(255, c, c, c);            
             bm.SetPixel(x, y, color);
         }
@@ -389,27 +390,20 @@ namespace WpfAppComputerGraphics2.Shapes
         {
             return (int)x;
         }
-        private float fPartOfNumber(float x)
+        private float FPartOfNumber(float x)
         {
             if (x > 0) return x - IPartOfNumber(x);
             else return x - (IPartOfNumber(x) + 1);
 
         }
-        private float rfPartOfNumber(float x)
+        private float RfPartOfNumber(float x)
         {
-            return 1 - fPartOfNumber(x);
-        }
-
-        private int RoundNumber(float x)
-        {
-            return IPartOfNumber(x + 0.5);
+            return 1 - FPartOfNumber(x);
         }
         private void DrawAALine(int x0, int y0, int x1, int y1, Bitmap bm)
         {
             bool steep = Absolute(y1 - y0) > Absolute(x1 - x0);
 
-            // swap the co-ordinates if slope > 1 or we
-            // draw backwards
             if (steep)
             {
                 Swap(ref x0, ref y0);
@@ -421,27 +415,22 @@ namespace WpfAppComputerGraphics2.Shapes
                 Swap(ref y0, ref y1);
             }
 
-            //compute the slope
             float dx = x1 - x0;
             float dy = y1 - y0;
             float gradient = dy / dx;
-            if (dx == 0.0)
-                gradient = 1;
+            if (dx == 0.0) gradient = 1;
 
             int xpxl1 = x0;
             int xpxl2 = x1;
             float intersectY = y0;
 
-            // main loop
             if (steep)
             {
                 int x;
                 for (x = xpxl1; x <= xpxl2; x++)
                 {
-                    // pixel coverage is determined by fractional
-                    // part of y co-ordinate
-                    drawPixel(IPartOfNumber(intersectY), x, rfPartOfNumber(intersectY), bm);
-                    drawPixel(IPartOfNumber(intersectY) - 1, x, fPartOfNumber(intersectY), bm);
+                    DrawPixel(IPartOfNumber(intersectY), x, RfPartOfNumber(intersectY), bm);
+                    DrawPixel(IPartOfNumber(intersectY) - 1, x, FPartOfNumber(intersectY), bm);
                     intersectY += gradient;
                 }
             }
@@ -450,10 +439,8 @@ namespace WpfAppComputerGraphics2.Shapes
                 int x;
                 for (x = xpxl1; x <= xpxl2; x++)
                 {
-                    // pixel coverage is determined by fractional
-                    // part of y co-ordinate
-                    drawPixel(x, IPartOfNumber(intersectY), rfPartOfNumber(intersectY), bm);
-                    drawPixel(x, IPartOfNumber(intersectY) - 1, fPartOfNumber(intersectY), bm);
+                    DrawPixel(x, IPartOfNumber(intersectY), RfPartOfNumber(intersectY), bm);
+                    DrawPixel(x, IPartOfNumber(intersectY) - 1, FPartOfNumber(intersectY), bm);
                     intersectY += gradient;
                 }
             }

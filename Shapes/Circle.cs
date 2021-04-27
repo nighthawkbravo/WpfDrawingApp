@@ -67,7 +67,14 @@ namespace WpfAppComputerGraphics2.Shapes
         {
             int r = (int)CalcEucliDist(Center, EdgePoint);
 
-            bm = midPointCircleDraw(Center.X, Center.Y, r, bm);
+            if(aliasFlag)
+            {
+                WuCircle(Center.X, Center.Y, r, bm);
+            }
+            else
+            {
+                bm = midPointCircleDraw(Center.X, Center.Y, r, bm);
+            }
 
             return bm;
         }
@@ -95,17 +102,17 @@ namespace WpfAppComputerGraphics2.Shapes
                 }
 
                 if (x < y) break;
-                ColorPixel(x + x_centre, y + y_centre, bm);
-                ColorPixel(-x + x_centre, y + y_centre, bm);
-                ColorPixel(x + x_centre, -y + y_centre, bm);
-                ColorPixel(-x + x_centre, -y + y_centre, bm);
+                ColorPixel(x + x_centre, y + y_centre, bm); // Top right
+                ColorPixel(-x + x_centre, y + y_centre, bm); // Top left
+                ColorPixel(x + x_centre, -y + y_centre, bm); // Bottom right
+                ColorPixel(-x + x_centre, -y + y_centre, bm); // Bottom left
 
                 if (x != y)
                 {
-                    ColorPixel(y + x_centre, x + y_centre, bm);
-                    ColorPixel(-y + x_centre, x + y_centre, bm);
-                    ColorPixel(y + x_centre, -x + y_centre, bm);
-                    ColorPixel(-y + x_centre, -x + y_centre, bm);
+                    ColorPixel(y + x_centre, x + y_centre, bm); // Top right
+                    ColorPixel(-y + x_centre, x + y_centre, bm); // Top left
+                    ColorPixel(y + x_centre, -x + y_centre, bm); // Bottom right
+                    ColorPixel(-y + x_centre, -x + y_centre, bm); // Bottom left
                 }
             }
             return bm;
@@ -114,6 +121,64 @@ namespace WpfAppComputerGraphics2.Shapes
         {
             if (!IsInBound(x, y, bm)) return;
             bm.SetPixel(x, y, myColor);
+        }
+
+        public void ColorPixel(int x, int y, Color c, Bitmap bm)
+        {
+            if (!IsInBound(x, y, bm)) return;
+            bm.SetPixel(x, y, c);
+        }
+
+        private double D(int r, int y)
+        {
+            return Math.Ceiling(Math.Sqrt(r * r - y * y)) - Math.Sqrt(r * r - y * y);
+        }
+
+        private void WuCircle(int x_centre, int y_centre, int r, Bitmap bm) 
+        { 
+            Color L = myColor; /*Line color*/
+            Color B = Color.FromArgb(255,0,0,0); /*Background Color*/
+            int x = r; 
+            int y = 0;
+            ColorPixel(x, y, L, bm); 
+            while (x > y) 
+            { 
+                ++y; 
+                x = (int) Math.Ceiling(Math.Sqrt(r * r - y * y)); 
+                
+                double T = D(r, y);
+
+                int r1 = (int)(L.R * (1 - T) + B.R * T);
+                int g1 = (int)(L.G * (1 - T) + B.G * T);
+                int b1 = (int)(L.B * (1 - T) + B.B * T);
+                Color c2 = Color.FromArgb(255, r1, g1, b1);
+
+                int r2 = (int)(L.R * T + B.R * (1 - T));
+                int g2 = (int)(L.G * T + B.G * (1 - T));
+                int b2 = (int)(L.B * T + B.B * (1 - T));
+                Color c1 = Color.FromArgb(255, r2, g2, b2);
+
+                ColorPixel(x + x_centre, y + y_centre, c2, bm);
+                ColorPixel(x-1 + x_centre, y + y_centre, c1, bm);
+                ColorPixel(-x + x_centre, y + y_centre, c2, bm);
+                ColorPixel(-(x-1) + x_centre, y + y_centre, c1, bm);
+                ColorPixel(x + x_centre, -y + y_centre, c2, bm);
+                ColorPixel((x-1) + x_centre, -y + y_centre, c1, bm);
+                ColorPixel(-x + x_centre, -y + y_centre, c2, bm);
+                ColorPixel(-(x-1) + x_centre, -y + y_centre, c1, bm);
+
+                if (x != y)
+                {
+                    ColorPixel(y + x_centre, x + y_centre, c2, bm);
+                    ColorPixel(y-1 + x_centre, x + y_centre, c1, bm);
+                    ColorPixel(-y + x_centre, x + y_centre, c2, bm);
+                    ColorPixel(-(y-1) + x_centre, x + y_centre, c1, bm);
+                    ColorPixel(y + x_centre, -x + y_centre, c2, bm);
+                    ColorPixel((y-1) + x_centre, -x + y_centre, c1, bm);
+                    ColorPixel(-y + x_centre, -x + y_centre, c2, bm);
+                    ColorPixel(-(y-1) + x_centre, -x + y_centre, c1, bm);
+                }
+            } 
         }
     }
 }
