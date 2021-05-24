@@ -39,8 +39,9 @@
                 <RowDefinition Height="140"/>
                 <RowDefinition Height="2"/>
 
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="140"/>
+                <RowDefinition Height="2"/>
+                <RowDefinition Height="*"/>                
 
                 <RowDefinition Height="2"/>
                 <RowDefinition Height="100"/>
@@ -190,8 +191,7 @@
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Thickness:" FontSize="16"  Grid.Column="0"/>
                         <TextBox Name="PolyThickBox" Grid.Column="1"  TextAlignment="Center" Text="1" TextChanged="PolyThickChange"/>
                     </Grid>
-                </Grid>
-                <!-- Draw and thickness -->
+                </Grid> <!-- Draw and thickness -->
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -201,6 +201,60 @@
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Center" FontSize="16"/>
                     </Button>
                     <Button Grid.Column="1" Margin="20,2" Click="MovePolyVertexButton">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Vertex" FontSize="16"/>
+                    </Button>
+                </Grid> <!-- Delete and move vertex -->
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="20,2" Click="DeleteShapeButton">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Delete" FontSize="16"/>
+                    </Button>
+                    <Button Grid.Column="1" Margin="20,2" Click="MovePolyEdgeButton">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Edge" FontSize="16"/>
+                    </Button>
+                </Grid> <!-- Move center and move edge -->
+            </Grid> <!-- Forth Section - Polygon -->
+            <Grid Grid.Row="7" Background="Black"></Grid>
+            <Grid Grid.Row="8" Margin="0,5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Rectangle" FontSize="16" TextDecorations="Underline"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="20,2" Click="DrawRectButton">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Draw" FontSize="16"/>
+                    </Button>
+                    <Grid Grid.Column="1" Margin="20,2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Thickness:" FontSize="16"  Grid.Column="0"/>
+                        <TextBox Name="RectThickBox" Grid.Column="1"  TextAlignment="Center" Text="1" TextChanged="RectThickChange"/> <!-- CHANGES NEEDED -->
+                    </Grid>
+                </Grid>
+                <!-- Draw and thickness -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="20,2" Click="MoveRectButton">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Center" FontSize="16"/>
+                    </Button>
+                    <Button Grid.Column="1" Margin="20,2" Click="MoveRectVertexButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Vertex" FontSize="16"/>
                     </Button>
                 </Grid>
@@ -213,14 +267,14 @@
                     <Button Grid.Column="0" Margin="20,2" Click="DeleteShapeButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Delete" FontSize="16"/>
                     </Button>
-                    <Button Grid.Column="1" Margin="20,2" Click="MovePolyEdgeButton">
+                    <Button Grid.Column="1" Margin="20,2" Click="MoveRectEdgeButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Edge" FontSize="16"/>
                     </Button>
                 </Grid>
                 <!-- Move center and move edge -->
-            </Grid> <!-- Forth Section - Polygon -->
-            <Grid Grid.Row="7" Background="Black"></Grid>
-            <Grid Grid.Row="8" Margin="0,5">
+            </Grid> <!-- Fifth Section - Rectangle -->
+            <Grid Grid.Row="9" Background="Black"></Grid>
+            <Grid Grid.Row="10" Margin="0,5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -238,9 +292,10 @@
                     </Button>
                 </Grid> <!-- Color Picker -->
             </Grid>
+            
 
-            <Grid Grid.Row="10" Background="Black"></Grid>
-            <Grid Grid.Row="11" Margin="0,5">
+            <Grid Grid.Row="11" Background="Black"></Grid>
+            <Grid Grid.Row="12" Margin="0,5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>

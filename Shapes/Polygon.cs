@@ -178,5 +178,24 @@ namespace WpfAppComputerGraphics2.Shapes
             }
             return bm;
         }
+
+        public List<Point> FindNeighbors(Point a)
+        {
+            var res = new List<Point>();
+
+            foreach(var e in Edges)
+            {
+                if(e.P1 == a)
+                {
+                    res.Add(e.P2);
+                }
+                if (e.P2 == a)
+                {
+                    res.Add(e.P1);
+                }
+            }
+
+            return res;
+        }
     }
 }

@@ -35,6 +35,7 @@ namespace WpfAppComputerGraphics2
 
         private int LineThickValue;
         private int PolyThickValue;
+        private int RectThickValue;
         public bool AliasingFlag = false;
 
         private BrushConverter bc = new BrushConverter();
@@ -112,6 +113,32 @@ namespace WpfAppComputerGraphics2
                 PolyThickBox.Background = (Brush)bc.ConvertFrom(mylightRed);
             }
         }
+        private void RectThickChange(object sender, TextChangedEventArgs e)
+        {
+            int thick = 1;
+            if (Int32.TryParse(RectThickBox.Text, out thick) && thick % 2 != 0)
+            {
+                RectThickBox.Background = (Brush)bc.ConvertFrom(mylightGreen);
+                RectThickValue = thick;
+
+                if (SelectedShape != null && SelectedShape is Rectangle)
+                {
+                    var rect = (Rectangle)SelectedShape;                    
+
+                    layers.Remove(SelectedShape);
+
+                    layers.Add(new Rectangle(rect.P1, rect.P2, ChoosenColor, RectThickValue));
+
+                    SelectedShape = null;
+                    SelectedObject.Text = "None";
+                    RenderLayers();
+                }
+            }
+            else
+            {
+                PolyThickBox.Background = (Brush)bc.ConvertFrom(mylightRed);
+            }
+        }
         private void ImageMouseMove(object sender, MouseEventArgs e)
         {
             var p = e.GetPosition(myImage);
@@ -173,6 +200,11 @@ namespace WpfAppComputerGraphics2
             polyMoveEdgeFlag = false;
             capsuleDrawFlag = false;
             selectShapeFlag = false;
+            rectDrawFlag = false;
+            rectMoveFlag = false;
+            rectMoveVertexFlag = false;
+            rectMoveEdgeFlag = false;
+
         }
 
         // ----- Flags -----
@@ -187,6 +219,11 @@ namespace WpfAppComputerGraphics2
         private bool polyMoveFlag = false;
         private bool polyMoveVertexFlag = false;
         private bool polyMoveEdgeFlag = false;
+
+        private bool rectDrawFlag = false;
+        private bool rectMoveFlag = false;
+        private bool rectMoveVertexFlag = false;
+        private bool rectMoveEdgeFlag = false;
 
         private bool capsuleDrawFlag = false;
 
@@ -436,6 +473,129 @@ namespace WpfAppComputerGraphics2
                     EndStepOfMouseDown();
                 }
             } // Capsule Drawing 
+            if (rectDrawFlag)
+            {
+                CanvasPoints.Add(new Point(x, y));
+                clickCount--;
+                if (clickCount <= 0)
+                {
+                    layers.Add(new Rectangle(CanvasPoints[0], CanvasPoints[1], ChoosenColor, RectThickValue));
+                    rectDrawFlag = false;
+                    EndStepOfMouseDown();
+                }
+            } // Rectangle Drawing 
+            if (rectMoveFlag)
+            {
+                CanvasPoints.Add(new Point(x, y));
+                clickCount--;
+                if (clickCount <= 0)
+                {
+                    var rect = (Rectangle)SelectedShape;
+                    var rectColor = rect.myColor;
+                    int t = rect.Thickness;
+                    var c = rect.GetCenter();
+
+                    Vector vectorFromCenter = System.Windows.Point.Subtract(new System.Windows.Point(c.X, c.Y),
+                                                                            new System.Windows.Point(CanvasPoints[0].X, CanvasPoints[0].Y));
+
+                    var tmpPo = new System.Windows.Point(rect.P1.X, rect.P1.Y);
+                    var tmpPo2 = System.Windows.Point.Subtract(tmpPo, vectorFromCenter);
+
+                    var tmpPo3 = new System.Windows.Point(rect.P2.X, rect.P2.Y);
+                    var tmpPo4 = System.Windows.Point.Subtract(tmpPo3, vectorFromCenter);
+
+                    layers.Remove(SelectedShape);
+                    layers.Add(new Rectangle(new Point((int)tmpPo2.X, (int)tmpPo2.Y), new Point((int)tmpPo4.X, (int)tmpPo4.Y), rectColor, t));
+
+                    rectMoveFlag = false;
+                    EndStepOfMouseDown();
+                }
+            } // Rectangle Moving
+            if (rectMoveVertexFlag)
+            {
+                CanvasPoints.Add(new Point(x, y));
+                clickCount--;
+                if (clickCount <= 0)
+                {
+                    var rect = (Rectangle)SelectedShape;
+                    var vertex = rect.FindClosestPoint(CanvasPoints[0]);
+                    int t = rect.Thickness;
+
+                    List<Point> newPoints = new List<Point>();
+
+                    foreach (var po in rect.GetPoints())
+                    {
+                        newPoints.Add(po);
+                    }
+
+                    var neighbors = rect.FindNeighbors(vertex);
+
+                    int xdif = (CanvasPoints[1].X - vertex.X);
+                    int ydif = (CanvasPoints[1].Y - vertex.Y);
+
+                    foreach (var p in neighbors)
+                    {
+                        if (p.X == vertex.X)
+                        {
+                            newPoints[newPoints.FindIndex(i => i == p)] = new Point(p.X + xdif, p.Y);
+                        }
+                        if (p.Y == vertex.Y)
+                        {
+                            newPoints[newPoints.FindIndex(i => i == p)] = new Point(p.X, p.Y + ydif);
+                        }
+                    }
+
+                    newPoints[newPoints.FindIndex(i => i == vertex)] = CanvasPoints[1];
+
+                    layers.Remove(SelectedShape);
+                    layers.Add(new Rectangle(newPoints, ChoosenColor, t));
+
+                    rectMoveVertexFlag = false;
+                    EndStepOfMouseDown();
+                }
+            } // Rectangle Moving Vertex
+            if (rectMoveEdgeFlag)
+            {
+                CanvasPoints.Add(new Point(x, y));
+                clickCount--;
+                if (clickCount <= 0)
+                {
+                    var rect = (Rectangle)SelectedShape;
+                    int t = rect.Thickness;
+                    var Edge = rect.FindClosestEdge(CanvasPoints[0]);
+
+                    List<Point> newPoints = new List<Point>();
+
+                    foreach (var po in rect.GetPoints())
+                    {
+                        newPoints.Add(po);
+                    }
+
+                    Vector vectorFromCenter = System.Windows.Point.Subtract(new System.Windows.Point(Edge.GetCenter().X, Edge.GetCenter().Y),
+                                                                            new System.Windows.Point(CanvasPoints[1].X, CanvasPoints[1].Y));
+
+                    var tmpPo = new System.Windows.Point(Edge.P1.X, Edge.P1.Y);
+                    var tmpPo2 = System.Windows.Point.Subtract(tmpPo, vectorFromCenter);
+
+                    var tmpPo3 = new System.Windows.Point(Edge.P2.X, Edge.P2.Y);
+                    var tmpPo4 = System.Windows.Point.Subtract(tmpPo3, vectorFromCenter);
+
+                    var res1 = new Point((int)tmpPo2.X, (int)tmpPo2.Y);
+                    var res2 = new Point((int)tmpPo4.X, (int)tmpPo4.Y);
+
+                    
+
+                    newPoints[newPoints.FindIndex(i => i == Edge.P1)] = res1;
+                    newPoints[newPoints.FindIndex(i => i == Edge.P2)] = res2;
+
+                    layers.Remove(SelectedShape);
+                    layers.Add(new Rectangle(newPoints, ChoosenColor, t));
+
+                    rectMoveEdgeFlag = false;
+                    EndStepOfMouseDown();
+                }
+            } // Rectangle Moving Edge
+
         }
 
         private void EndStepOfMouseDown()
@@ -482,7 +642,7 @@ namespace WpfAppComputerGraphics2
             {
                 ResetFlagsAndCP();
                 lineDrawFlag = true;
-                clickCount = 2;                
+                clickCount = 2;
             }
         }
         private void MoveLineEndpointButton(object sender, RoutedEventArgs e)
@@ -524,7 +684,6 @@ namespace WpfAppComputerGraphics2
             }
         }
 
-
         // ----- Polygon -----
         private void DrawPolyButton(object sender, RoutedEventArgs e)
         {
@@ -561,6 +720,44 @@ namespace WpfAppComputerGraphics2
                 clickCount = 2;
             }
         }
+
+        // ----- Rectangle -----
+        private void DrawRectButton(object sender, RoutedEventArgs e)
+        {
+            if (!rectDrawFlag)
+            {
+                ResetFlagsAndCP();
+                rectDrawFlag = true;
+                clickCount = 2;
+            }
+        }
+        private void MoveRectButton(object sender, RoutedEventArgs e)
+        {
+            if (!rectMoveFlag && SelectedShape != null && SelectedShape is Rectangle)
+            {
+                ResetFlagsAndCP();
+                rectMoveFlag = true;
+                clickCount = 1;
+            }
+        }
+        private void MoveRectVertexButton(object sender, RoutedEventArgs e)
+        {
+            if (!rectMoveVertexFlag && SelectedShape != null && SelectedShape is Rectangle)
+            {
+                ResetFlagsAndCP();
+                rectMoveVertexFlag = true;
+                clickCount = 2;
+            }
+        }
+        private void MoveRectEdgeButton(object sender, RoutedEventArgs e)
+        {
+            if (!rectMoveEdgeFlag && SelectedShape != null && SelectedShape is Rectangle)
+            {
+                ResetFlagsAndCP();
+                rectMoveEdgeFlag = true;
+                clickCount = 2;
+            }
+        }        
 
         // ----- Lab Assignment -----
         private void DrawCapsuleButton(object sender, RoutedEventArgs e)
@@ -756,6 +953,40 @@ namespace WpfAppComputerGraphics2
                     }
                     layers.Add(new Polygon(pts, Color.FromArgb(255, lenAndRGBs[1], lenAndRGBs[2], lenAndRGBs[3])));
                 }
+                if (sb.ToString(0, 4) == "Rect")
+                {
+                    List<int> nums = new List<int>();
+
+                    int i;
+                    string tmp = "";
+                    for (i = 4; sb[i] != ':'; i++)
+                    {
+                        if (sb[i] != ',')
+                        {
+                            tmp += sb[i];
+                        }
+                        else
+                        {
+                            nums.Add(Int32.Parse(tmp));
+                            tmp = "";
+                        }
+                    }
+                    i++;
+                    for (; sb[i] != ';'; i++)
+                    {
+                        if (sb[i] != ',')
+                        {
+                            tmp += sb[i];
+                        }
+                        else
+                        {
+                            nums.Add(Int32.Parse(tmp));
+                            tmp = "";
+                        }
+                    }
+                    layers.Add(new Rectangle(new Point(nums[4], nums[5]), new Point(nums[6], nums[7]), Color.FromArgb(255, nums[1], nums[2], nums[3]), nums[0]));
+                    //return $"Rect{Thickness},{myColor.R},{myColor.G},{myColor.B},:{P1.X},{P1.Y},{P2.X},{P2.Y},;";
+                }
             }
             RenderLayers();
         }
@@ -795,6 +1026,6 @@ namespace WpfAppComputerGraphics2
 
                 return new Bitmap(bitmap);
             }
-        }
+        }        
     }
 }
