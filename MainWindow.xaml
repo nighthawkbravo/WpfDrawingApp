@@ -30,18 +30,21 @@
 
         <Grid Grid.Column="1" Margin="0,0,5,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="90"/>
                 <RowDefinition Height="2"/>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="90"/>
                 <RowDefinition Height="2"/>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="90"/>
                 <RowDefinition Height="2"/>
-                <RowDefinition Height="140"/>
+                <RowDefinition Height="120"/>
                 <RowDefinition Height="2"/>
 
-                <RowDefinition Height="140"/>
+                <RowDefinition Height="120"/>
                 <RowDefinition Height="2"/>
-                <RowDefinition Height="*"/>                
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="2"/>
+                <RowDefinition Height="*"/>
+                
 
                 <RowDefinition Height="2"/>
                 <RowDefinition Height="100"/>
@@ -155,8 +158,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="20,2" Click="DeleteShapeButton">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Delete" FontSize="16"/>
+                    <Button Grid.Column="0" Margin="20,2" Click="FillShapeButton">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Fill" FontSize="16"/>
                     </Button>
                     <Button Grid.Column="1" Margin="20,2" Click="MoveCircleEP">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Edge Point" FontSize="16"/>
@@ -209,8 +212,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="20,2" Click="DeleteShapeButton">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Delete" FontSize="16"/>
+                    <Button Grid.Column="0" Margin="20,2" Click="FillShapeButton">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Fill" FontSize="16"/>
                     </Button>
                     <Button Grid.Column="1" Margin="20,2" Click="MovePolyEdgeButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Edge" FontSize="16"/>
@@ -264,8 +267,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="20,2" Click="DeleteShapeButton">
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Delete" FontSize="16"/>
+                    <Button Grid.Column="0" Margin="20,2" Click="FillShapeButton">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Fill" FontSize="16"/>
                     </Button>
                     <Button Grid.Column="1" Margin="20,2" Click="MoveRectEdgeButton">
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Move Edge" FontSize="16"/>
@@ -291,11 +294,24 @@
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Draw Capsule" FontSize="16"/>
                     </Button>
                 </Grid> <!-- Color Picker -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="DeleteButton" Grid.Column="0" Margin="20,2" Click="DeleteShapeButton">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Delete" FontSize="16"/>
+                    </Button>
+                    <Button Name="FloodFillbutton" Grid.Column="1" Margin="20,2" Click="FloodFill">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Flood Fill" FontSize="16"/>
+                    </Button>
+                </Grid>
+                <!-- Color Picker -->
             </Grid>
-            
-
             <Grid Grid.Row="11" Background="Black"></Grid>
-            <Grid Grid.Row="12" Margin="0,5">
+
+            <Grid Grid.Row="13" Background="Black"></Grid>
+            <Grid Grid.Row="14" Margin="0,5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
