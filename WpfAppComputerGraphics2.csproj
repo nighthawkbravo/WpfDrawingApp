@@ -57,6 +57,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="3DStuff\Diamond3D.cs" />
+    <Compile Include="3DStuff\Math3D.cs" />
+    <Compile Include="3DStuff\Matrix.cs" />
+    <Compile Include="3DStuff\Point3d.cs" />
+    <Compile Include="Edge.cs" />
     <Compile Include="Shapes\Capsule.cs" />
     <Compile Include="Shapes\Circle.cs" />
     <Compile Include="Shapes\Line.cs" />
