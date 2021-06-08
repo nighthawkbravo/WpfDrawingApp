@@ -10,13 +10,14 @@ namespace WpfAppComputerGraphics2.Shapes
     class Rectangle : IShape
     {
         public Color myColor { get; set; }
+        public bool Fill { get; set; }
         public int Thickness { set; get; }
         public Point P1 { set; get; }
         public Point P2 { set; get; }
 
         private Polygon poly;
 
-        public Rectangle(Point p1, Point p2, Color b, int t = 1)
+        public Rectangle(Point p1, Point p2, Color b, bool f, int t = 1)
         {
             P1 = p1;
             P2 = p2;
@@ -33,22 +34,24 @@ namespace WpfAppComputerGraphics2.Shapes
             var P4 = new Point(P2.X - xdif, P2.Y); //var P4 = new Point(P2.X - xdif, P2.Y - ydif);
             Points.Add(P4);
 
-            poly = new Polygon(Points, b, t);
+            poly = new Polygon(Points, b, f, t);
 
             Thickness = t;
             myColor = b;
+            Fill = f;
         }
-        public Rectangle(List<Point> points, Color b, int t = 1)
+        public Rectangle(List<Point> points, Color b, bool f, int t = 1)
         {
             P1 = points[0];
             P2 = points[2];
 
             List<Point> Points = points;            
 
-            poly = new Polygon(Points, b, t);
+            poly = new Polygon(Points, b, f, t);
 
             Thickness = t;
             myColor = b;
+            Fill = f;
         }
 
         public void ColorPixel(int x, int y, Bitmap bm)
@@ -73,11 +76,62 @@ namespace WpfAppComputerGraphics2.Shapes
         }
         public Bitmap Render(Bitmap bm, bool aliasFlag)
         {
-            return poly.Render(bm, aliasFlag);
+            Bitmap b = poly.Render(bm, aliasFlag);
+
+            var p1 = TopLeft();
+            var p2 = BottomRight();
+
+            if (Fill)
+            {
+                for (int i = p1.X; i < p2.X; ++i)
+                {
+                    for (int j = p2.Y; j < p1.Y; ++j)
+                    {
+                        b.SetPixel(i, j, myColor);
+                    }
+                }
+            }
+
+
+
+
+            return b;
+        }
+
+        private Point TopLeft()
+        {
+            var tl = new Point(int.MaxValue, 0);
+            foreach(var p in GetPoints())
+            {
+                if(p.X<tl.X && p.Y > tl.Y)
+                {
+                    tl = p;
+                }
+            }
+            return tl;
+        }
+        private Point BottomRight()
+        {
+            var br = new Point(0, int.MaxValue);
+            foreach (var p in GetPoints())
+            {
+                if (p.X > br.X && p.Y < br.Y)
+                {
+                    br = p;
+                }
+            }
+            return br;
         }
         public string Save()
         {
-            return $"Rect{Thickness},{myColor.R},{myColor.G},{myColor.B},:{P1.X},{P1.Y},{P2.X},{P2.Y},;";
+            //return $"Rect{Thickness},{myColor.R},{myColor.G},{myColor.B},:{P1.X},{P1.Y},{P2.X},{P2.Y},;";
+            return $"Rect{Thickness},{myColor.R},{myColor.G},{myColor.B},{Bool2Num(Fill)},:{P1.X},{P1.Y},{P2.X},{P2.Y},;";
+        }
+
+        private int Bool2Num(bool b)
+        {
+            if (b) return 1;
+            return 0;
         }
 
         public List<Point> GetPoints()

@@ -14,20 +14,23 @@ namespace WpfAppComputerGraphics2.Shapes
     public class Circle : IShape
     {
         public Color myColor { get; set; }
+        public bool Fill { get; set; }
         public Point Center { set; get; }
         public Point EdgePoint { set; get; }
 
-        public Circle(Point c, Point e)
+        public Circle(Point c, Point e, bool f)
         {
             Center = c;
             EdgePoint = e;
             myColor = Color.Black;
+            Fill = f;
         }
-        public Circle(Point c, Point e, Color b)
+        public Circle(Point c, Point e, Color b, bool f)
         {
             Center = c;
             EdgePoint = e;
             myColor = b;
+            Fill = f;
         }
         public Point GetCenter()
         {
@@ -35,7 +38,12 @@ namespace WpfAppComputerGraphics2.Shapes
         }
         public string Save()
         {
-            return $"Circle{myColor.R},{myColor.G},{myColor.B},:{Center.X},{Center.Y},{EdgePoint.X},{EdgePoint.Y},;";
+            return $"Circle{myColor.R},{myColor.G},{myColor.B},{Bool2Num(Fill)},:{Center.X},{Center.Y},{EdgePoint.X},{EdgePoint.Y},;";
+        }
+        private int Bool2Num(bool b)
+        {
+            if (b) return 1;
+            return 0;
         }
         public string GetNameAndCenter()
         {
@@ -74,6 +82,22 @@ namespace WpfAppComputerGraphics2.Shapes
             else
             {
                 bm = midPointCircleDraw(Center.X, Center.Y, r, bm);
+            }
+
+            if(Fill)
+            {
+                int dif = r;
+
+                for(int i=Center.X - dif; i< Center.X + dif; ++i)
+                {
+                    for (int j = Center.Y - dif; j < Center.Y + dif; ++j)
+                    {
+                        if(CalcEucliDist(new Point(i,j), Center) <= r)
+                        {
+                            ColorPixel(i, j, bm);
+                        }
+                    }
+                }
             }
 
             return bm;

@@ -101,7 +101,7 @@ namespace WpfAppComputerGraphics2
 
                     layers.Remove(SelectedShape);
 
-                    layers.Add(new Polygon(points, ChoosenColor, PolyThickValue));
+                    layers.Add(new Polygon(points, ChoosenColor, false, PolyThickValue));
 
                     SelectedShape = null;
                     SelectedObject.Text = "None";
@@ -127,7 +127,7 @@ namespace WpfAppComputerGraphics2
 
                     layers.Remove(SelectedShape);
 
-                    layers.Add(new Rectangle(rect.P1, rect.P2, ChoosenColor, RectThickValue));
+                    layers.Add(new Rectangle(rect.P1, rect.P2, ChoosenColor, false, RectThickValue));
 
                     SelectedShape = null;
                     SelectedObject.Text = "None";
@@ -204,7 +204,7 @@ namespace WpfAppComputerGraphics2
             rectMoveFlag = false;
             rectMoveVertexFlag = false;
             rectMoveEdgeFlag = false;
-
+            floodflag = false;
         }
 
         // ----- Flags -----
@@ -226,6 +226,7 @@ namespace WpfAppComputerGraphics2
         private bool rectMoveEdgeFlag = false;
 
         private bool capsuleDrawFlag = false;
+        private bool floodflag = false;
 
         private bool selectShapeFlag = false;
 
@@ -288,7 +289,7 @@ namespace WpfAppComputerGraphics2
                 clickCount--;
                 if (clickCount <= 0)
                 {
-                    layers.Add(new Circle(CanvasPoints[0], CanvasPoints[1], ChoosenColor));
+                    layers.Add(new Circle(CanvasPoints[0], CanvasPoints[1], ChoosenColor, false));
                     circleDrawFlag = false;
                     EndStepOfMouseDown();
                 }
@@ -302,6 +303,7 @@ namespace WpfAppComputerGraphics2
                     var cir = (Circle)SelectedShape;
                     var c = cir.GetCenter();
                     var ep = cir.EdgePoint;
+                    var f = cir.Fill;
 
                     System.Windows.Point p1 = new System.Windows.Point(c.X, c.Y);
                     System.Windows.Point p2 = new System.Windows.Point(CanvasPoints[0].X, CanvasPoints[0].Y);
@@ -314,7 +316,7 @@ namespace WpfAppComputerGraphics2
 
 
                     layers.Remove(SelectedShape);
-                    layers.Add(new Circle(CanvasPoints[0], newEp, ChoosenColor));
+                    layers.Add(new Circle(CanvasPoints[0], newEp, ChoosenColor, f));
 
                     circleMoveFlag = false;
                     EndStepOfMouseDown();
@@ -328,9 +330,10 @@ namespace WpfAppComputerGraphics2
                 {
                     var cir = (Circle)SelectedShape;
                     var c = cir.Center;
+                    var f = cir.Fill;
 
                     layers.Remove(SelectedShape);
-                    layers.Add(new Circle(c, CanvasPoints[0], ChoosenColor));
+                    layers.Add(new Circle(c, CanvasPoints[0], ChoosenColor, f));
 
                     circleMoveEPFlag = false;
                     EndStepOfMouseDown();
@@ -341,7 +344,7 @@ namespace WpfAppComputerGraphics2
                 if (CanvasPoints.Count == 0)
                 {
                     CanvasPoints.Add(new Point(x, y));
-                    cir = new Circle(new Point(x, y), new Point(x + PolyStopRadius, y), Color.Green);
+                    cir = new Circle(new Point(x, y), new Point(x + PolyStopRadius, y), Color.Green, false);
                     layers.Add(cir);
                     RenderLayers();
                 }
@@ -359,7 +362,7 @@ namespace WpfAppComputerGraphics2
                         {
                             pts.Add(po);
                         }
-                        layers.Add(new Polygon(pts, ChoosenColor, PolyThickValue));
+                        layers.Add(new Polygon(pts, ChoosenColor, false, PolyThickValue));
                         layers.Remove(cir);
                         EndStepOfMouseDown();
                     }
@@ -374,6 +377,7 @@ namespace WpfAppComputerGraphics2
                     var poly = (Polygon)SelectedShape;
                     int t = poly.Thickness;
                     var c = poly.GetCenter();
+                    var f = cir.Fill;
 
                     List<Point> newPoints = new List<Point>();
 
@@ -390,7 +394,7 @@ namespace WpfAppComputerGraphics2
 
 
                     layers.Remove(SelectedShape);
-                    layers.Add(new Polygon(newPoints, ChoosenColor, t));
+                    layers.Add(new Polygon(newPoints, ChoosenColor, f, t));
 
                     polyMoveFlag = false;
                     EndStepOfMouseDown();
@@ -405,6 +409,7 @@ namespace WpfAppComputerGraphics2
                     var poly = (Polygon)SelectedShape;
                     var vertex = poly.FindClosestPoint(CanvasPoints[0]);
                     int t = poly.Thickness;
+                    var f = cir.Fill;
 
                     List<Point> newPoints = new List<Point>();
 
@@ -416,7 +421,7 @@ namespace WpfAppComputerGraphics2
                     newPoints[newPoints.FindIndex(i => i == vertex)] = CanvasPoints[1];
 
                     layers.Remove(SelectedShape);
-                    layers.Add(new Polygon(newPoints, ChoosenColor, t));
+                    layers.Add(new Polygon(newPoints, ChoosenColor, f, t));
 
 
                     polyMoveVertexFlag = false;
@@ -432,7 +437,8 @@ namespace WpfAppComputerGraphics2
                     var poly = (Polygon)SelectedShape;
                     int t = poly.Thickness;
                     var Edge = poly.FindClosestEdge(CanvasPoints[0]);
-                    
+                    var f = cir.Fill;
+
                     List<Point> newPoints = new List<Point>();
 
                     Vector vectorFromCenter = System.Windows.Point.Subtract(new System.Windows.Point(Edge.GetCenter().X, Edge.GetCenter().Y),
@@ -456,7 +462,7 @@ namespace WpfAppComputerGraphics2
                     newPoints[newPoints.FindIndex(i => i == Edge.P2)] = res2;
 
                     layers.Remove(SelectedShape);
-                    layers.Add(new Polygon(newPoints, ChoosenColor, t));
+                    layers.Add(new Polygon(newPoints, ChoosenColor, f, t));
 
                     polyMoveEdgeFlag = false;
                     EndStepOfMouseDown();
@@ -479,7 +485,7 @@ namespace WpfAppComputerGraphics2
                 clickCount--;
                 if (clickCount <= 0)
                 {
-                    layers.Add(new Rectangle(CanvasPoints[0], CanvasPoints[1], ChoosenColor, RectThickValue));
+                    layers.Add(new Rectangle(CanvasPoints[0], CanvasPoints[1], ChoosenColor, false, RectThickValue));
                     rectDrawFlag = false;
                     EndStepOfMouseDown();
                 }
@@ -494,6 +500,7 @@ namespace WpfAppComputerGraphics2
                     var rectColor = rect.myColor;
                     int t = rect.Thickness;
                     var c = rect.GetCenter();
+                    var f = cir.Fill;
 
                     Vector vectorFromCenter = System.Windows.Point.Subtract(new System.Windows.Point(c.X, c.Y),
                                                                             new System.Windows.Point(CanvasPoints[0].X, CanvasPoints[0].Y));
@@ -505,7 +512,7 @@ namespace WpfAppComputerGraphics2
                     var tmpPo4 = System.Windows.Point.Subtract(tmpPo3, vectorFromCenter);
 
                     layers.Remove(SelectedShape);
-                    layers.Add(new Rectangle(new Point((int)tmpPo2.X, (int)tmpPo2.Y), new Point((int)tmpPo4.X, (int)tmpPo4.Y), rectColor, t));
+                    layers.Add(new Rectangle(new Point((int)tmpPo2.X, (int)tmpPo2.Y), new Point((int)tmpPo4.X, (int)tmpPo4.Y), rectColor, f, t));
 
                     rectMoveFlag = false;
                     EndStepOfMouseDown();
@@ -520,6 +527,7 @@ namespace WpfAppComputerGraphics2
                     var rect = (Rectangle)SelectedShape;
                     var vertex = rect.FindClosestPoint(CanvasPoints[0]);
                     int t = rect.Thickness;
+                    var f = cir.Fill;
 
                     List<Point> newPoints = new List<Point>();
 
@@ -548,7 +556,7 @@ namespace WpfAppComputerGraphics2
                     newPoints[newPoints.FindIndex(i => i == vertex)] = CanvasPoints[1];
 
                     layers.Remove(SelectedShape);
-                    layers.Add(new Rectangle(newPoints, ChoosenColor, t));
+                    layers.Add(new Rectangle(newPoints, ChoosenColor, f, t));
 
                     rectMoveVertexFlag = false;
                     EndStepOfMouseDown();
@@ -563,6 +571,7 @@ namespace WpfAppComputerGraphics2
                     var rect = (Rectangle)SelectedShape;
                     int t = rect.Thickness;
                     var Edge = rect.FindClosestEdge(CanvasPoints[0]);
+                    var f = cir.Fill;
 
                     List<Point> newPoints = new List<Point>();
 
@@ -571,28 +580,45 @@ namespace WpfAppComputerGraphics2
                         newPoints.Add(po);
                     }
 
-                    Vector vectorFromCenter = System.Windows.Point.Subtract(new System.Windows.Point(Edge.GetCenter().X, Edge.GetCenter().Y),
-                                                                            new System.Windows.Point(CanvasPoints[1].X, CanvasPoints[1].Y));
+                    Point res1;
+                    Point res2;
 
-                    var tmpPo = new System.Windows.Point(Edge.P1.X, Edge.P1.Y);
-                    var tmpPo2 = System.Windows.Point.Subtract(tmpPo, vectorFromCenter);
+                    if (Edge.P1.X == Edge.P2.X)
+                    {
+                        int xdif = (CanvasPoints[1].X - Edge.GetCenter().X);
+                        res1 = new Point(Edge.P1.X+xdif, Edge.P1.Y);
+                        res2 = new Point(Edge.P2.X+xdif, Edge.P2.Y);
+                    }
+                    else //if (Edge.P1.Y == Edge.P2.Y)
+                    {
+                        int ydif = (CanvasPoints[1].Y - Edge.GetCenter().Y);
+                        res1 = new Point(Edge.P1.X, Edge.P1.Y+ydif);
+                        res2 = new Point(Edge.P2.X, Edge.P2.Y+ydif);
+                    }
 
-                    var tmpPo3 = new System.Windows.Point(Edge.P2.X, Edge.P2.Y);
-                    var tmpPo4 = System.Windows.Point.Subtract(tmpPo3, vectorFromCenter);
-
-                    var res1 = new Point((int)tmpPo2.X, (int)tmpPo2.Y);
-                    var res2 = new Point((int)tmpPo4.X, (int)tmpPo4.Y);
-
-                    
+                                      
 
                     newPoints[newPoints.FindIndex(i => i == Edge.P1)] = res1;
                     newPoints[newPoints.FindIndex(i => i == Edge.P2)] = res2;
 
                     layers.Remove(SelectedShape);
-                    layers.Add(new Rectangle(newPoints, ChoosenColor, t));
+                    layers.Add(new Rectangle(newPoints, ChoosenColor, f, t));
 
                     rectMoveEdgeFlag = false;
                     EndStepOfMouseDown();
+                }
+            } // Rectangle Moving Edge
+            if (floodflag)
+            {
+                CanvasPoints.Add(new Point(x, y));
+                clickCount--;
+                if (clickCount <= 0)
+                {
+                    FloodFillSim(CanvasPoints[0]);
+                    floodflag = false;
+                    CanvasPoints.Clear();
+                    SelectedShape = null;
+                    SelectedObject.Text = "None";
                 }
             } // Rectangle Moving Edge
 
@@ -770,8 +796,125 @@ namespace WpfAppComputerGraphics2
             }
         }
 
+        private void FloodFill(object sender, RoutedEventArgs e)
+        {
+            if (!floodflag)
+            {
+                ResetFlagsAndCP();
+                floodflag = true;
+                clickCount = 1;
+            }
+        }
+
+        private void FloodFillSim(Point sp)
+        {
+            foreach (var shape in layers)
+            {
+                bm = shape.Render(bm, AliasingFlag);
+            }
+            FloodFillA(sp.X, sp.Y);            
+        }
+        public void FloodFillA(int x, int y)
+        {
+            if (bm.GetPixel(x, y).A == Color.Black.A) return;
+
+            Stack<Point> points = new Stack<Point>();
+            points.Push(new Point(x, y));
+            bm.SetPixel(x, y, Color.Black);
+
+            while (points.Count > 0)
+            {
+                Point pt = points.Pop();
+                if (pt.X > 0) CheckPoint(points, pt.X - 1, pt.Y, Color.Black);
+                if (pt.Y > 0) CheckPoint(points, pt.X, pt.Y - 1, Color.Black);
+                if (pt.X < Width - 1) CheckPoint(points, pt.X + 1, pt.Y, Color.Black);
+                if (pt.Y < Height - 1) CheckPoint(points, pt.X, pt.Y + 1, Color.Black);
+            }
+            DisplayImage(bm);
+        }
+        private void CheckPoint(Stack<Point> points, int x, int y, Color nc)
+        {
+            var p = new Point(x, y);
+            if(!IsValidCoor(p)) return;
+            if (!IsValidColor(p)) return;
+
+            points.Push(p);
+            bm.SetPixel(x, y, nc);
+        }
+        private bool IsValidColor(Point p)
+        {
+            return bm.GetPixel(p.X, p.Y).A != Color.Black.A;
+        }
+        private bool IsValidCoor(Point p)
+        {
+            if (p.X > 0 && p.X < width-1 && p.Y > 0 && p.Y < height-1) return true;
+            return false;
+        }
+
+        
+        
+        
+
 
         // ----- More menu stuff -----
+
+        private void FillShapeButton(object sender, RoutedEventArgs e)
+        {
+            switch (SelectedShape)
+            {
+                case Rectangle rect:
+                    if (rect.Fill)
+                    {
+                        var r = new Rectangle(rect.GetPoints(), rect.myColor, false, rect.Thickness);
+
+                        layers.Remove(SelectedShape);
+                        layers.Add(r);
+                    }
+                    else
+                    {
+                        var r = new Rectangle(rect.GetPoints(), rect.myColor, true, rect.Thickness);
+                        layers.Remove(SelectedShape);
+                        layers.Add(r);
+                    }
+                    break;
+                case Polygon poly:
+                    if (poly.Fill)
+                    {
+                        var p = new Polygon(poly.GetPoints(), poly.myColor, false, poly.Thickness);
+
+                        layers.Remove(SelectedShape);
+                        layers.Add(p);
+                    }
+                    else
+                    {
+                        var p = new Polygon(poly.GetPoints(), poly.myColor, true, poly.Thickness);                        
+                        layers.Remove(SelectedShape);
+                        layers.Add(p);
+                    }
+                    break;
+                case Circle cir:
+                    if(cir.Fill)
+                    {
+                        var c = new Circle(cir.Center, cir.EdgePoint, cir.myColor, false);                        
+
+                        layers.Remove(SelectedShape);
+                        layers.Add(c);
+                    }
+                    else
+                    {
+                        var c = new Circle(cir.Center, cir.EdgePoint, cir.myColor, true);
+                        layers.Remove(SelectedShape);
+                        layers.Add(c);
+                    }
+
+                    break;
+                default:
+                    return;
+            }
+            RenderLayers();
+            SelectedShape = null;
+            SelectedObject.Text = "None";
+        }
 
         private void SwitchAntiAliasingButton(object sender, RoutedEventArgs e)
         {
@@ -907,11 +1050,11 @@ namespace WpfAppComputerGraphics2
                             tmp = "";
                         }
                     }
-                    layers.Add(new Circle(new Point(nums[3], nums[4]), new Point(nums[5], nums[6]), Color.FromArgb(255, nums[0], nums[1], nums[2])));
+                    layers.Add(new Circle(new Point(nums[4], nums[5]), new Point(nums[6], nums[7]), Color.FromArgb(255, nums[0], nums[1], nums[2]), Num2Bool(nums[3])));
                 }
                 if (sb.ToString(0, 7) == "Polygon")
                 {
-                    List<int> lenAndRGBs = new List<int>(4);
+                    List<int> lenAndRGBs = new List<int>(5);
                     List<int> coords = new List<int>();
                     List<Point> pts = new List<Point>();
 
@@ -946,12 +1089,11 @@ namespace WpfAppComputerGraphics2
                     }
 
 
-
                     for (int j = 0; j < coords.Count - 1; j+=2)
                     {
                         pts.Add(new Point(coords[j], coords[j + 1]));
                     }
-                    layers.Add(new Polygon(pts, Color.FromArgb(255, lenAndRGBs[1], lenAndRGBs[2], lenAndRGBs[3])));
+                    layers.Add(new Polygon(pts, Color.FromArgb(255, lenAndRGBs[1], lenAndRGBs[2], lenAndRGBs[3]), Num2Bool(lenAndRGBs[4])));
                 }
                 if (sb.ToString(0, 4) == "Rect")
                 {
@@ -984,14 +1126,17 @@ namespace WpfAppComputerGraphics2
                             tmp = "";
                         }
                     }
-                    layers.Add(new Rectangle(new Point(nums[4], nums[5]), new Point(nums[6], nums[7]), Color.FromArgb(255, nums[1], nums[2], nums[3]), nums[0]));
-                    //return $"Rect{Thickness},{myColor.R},{myColor.G},{myColor.B},:{P1.X},{P1.Y},{P2.X},{P2.Y},;";
+                    layers.Add(new Rectangle(new Point(nums[5], nums[6]), new Point(nums[7], nums[8]), Color.FromArgb(255, nums[1], nums[2], nums[3]), Num2Bool(nums[4]), nums[0]));                    
                 }
             }
             RenderLayers();
         }
 
-
+        private bool Num2Bool(int i)
+        {
+            if (i == 1) return true;
+            return false;
+        }
 
 
 
@@ -1026,6 +1171,6 @@ namespace WpfAppComputerGraphics2
 
                 return new Bitmap(bitmap);
             }
-        }        
+        }
     }
 }

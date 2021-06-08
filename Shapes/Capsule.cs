@@ -13,6 +13,7 @@ namespace WpfAppComputerGraphics2.Shapes
     public class Capsule : IShape
     {
         public Color myColor { get; set; }
+        public bool Fill { get; set; }
         public Point Cp1 { set; get; }
         public Point Cp2 { set; get; }
         public Point EdgePoint { set; get; }

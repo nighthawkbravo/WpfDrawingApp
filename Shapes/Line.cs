@@ -14,6 +14,7 @@ namespace WpfAppComputerGraphics2.Shapes
     public class Line : IShape
     {
         public Color myColor { get; set; }
+        public bool Fill { get; set; }
         public Point P1 { set; get; }
         public Point P2 { set; get; }
         public int Thickness { set; get; }
@@ -24,6 +25,7 @@ namespace WpfAppComputerGraphics2.Shapes
             P2 = p2;
             Thickness = t;
             myColor = Color.Black;
+            Fill = false;
         }
         public Line(Point p1, Point p2, Color b, int t = 1)
         {
@@ -31,6 +33,7 @@ namespace WpfAppComputerGraphics2.Shapes
             P2 = p2;
             Thickness = t;
             myColor = b;
+            Fill = false;
         }
         public Point GetCenter()
         {

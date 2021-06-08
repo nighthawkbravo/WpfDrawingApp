@@ -14,6 +14,7 @@ namespace WpfAppComputerGraphics2
     public interface IShape
     {
         Color myColor { get; set; }
+        bool Fill { get; set; }
         Point GetCenter();
         Bitmap Render(Bitmap wbm, bool aliasFlag);
         string Save();
